@@ -1,10 +1,22 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["resources/js/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
-        }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["resources/js/*"],
+      "ziggy-js": ["./vendor/tightenco/ziggy"]
     },
-    "exclude": ["node_modules", "public"]
+    // --- TAMBAHAN ---
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "preserve" // Opsi paling penting untuk file .vue
+    // --- END TAMBAHAN ---
+  },
+  // --- TAMBAHAN ---
+  "include": [
+    "resources/js/**/*.js",
+    "resources/js/**/*.vue"
+  ],
+  // --- END TAMBAHAN ---
+  "exclude": ["node_modules", "public"]
 }
