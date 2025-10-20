@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminLoginController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,6 +14,20 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Menampilkan halaman login admin
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    // Menangani proses login admin
+    Route::post('/login', [AdminLoginController::class, 'login']);
+    // Rute dashboard admin (setelah login berhasil)
+    Route::middleware('auth:admin')->get('/dashboard', function () { // Ganti 'auth:admin' jika Anda menggunakan guard berbeda
+        return Inertia::render('Admin/Dashboard'); // Contoh halaman dashboard admin
+    })->name('dashboard');
+    // Menangani proses logout admin
+    Route::middleware('auth:admin')->post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+});
+
 
 Route::get('/menu', function () {
     // Di sini Anda perlu mengambil data menu dari database atau sumber lain

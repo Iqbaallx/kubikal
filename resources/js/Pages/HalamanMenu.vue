@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3'; // Hapus 'Link' karena sudah pindah ke AppHeader
 import MenuDetailModal from '@/Components/MenuDetailModal.vue';
+import AppHeader from '@/Components/AppHeader.vue'; // <-- IMPORT HEADER
+import AppFooter from '@/Components/AppFooter.vue'; // <-- IMPORT FOOTER
 
 // Menerima props 'menus' dari controller Laravel
 const props = defineProps({
@@ -10,7 +12,7 @@ const props = defineProps({
     canRegister: Boolean,
 });
 
-const activeTab = ref('makanan'); // 'makanan' atau 'minuman'
+const activeTab = ref('minuman'); // 'makanan' atau 'minuman'
 const activeSubTab = ref('kopi'); // 'kopi' atau 'non-kopi' (hanya untuk minuman)
 
 const showMenuModal = ref(false);
@@ -59,63 +61,16 @@ const setActiveSubTab = (subTabName) => {
 <template>
     <Head title="Menu" />
 
-    <div class="bg-white text-gray-900 min-h-screen flex flex-col">
-        <header class="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-200">
-            <nav class="container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
-                <!-- Logo di kiri -->
-                <Link href="/" class="flex items-center space-x-3">
-                    <!-- Logo Image - ganti src dengan path logo kamu -->
-                    <img 
-                        src="/images/logo.png" 
-                        alt="Kubikal Space Logo" 
-                        class="h-12 w-auto object-contain"
-                        @error="handleImageError"
-                    >
-                    <span class="font-semibold text-xl">Kubikal Space</span>
-                </Link>
-
-                <!-- Menu navigasi di tengah -->
-                <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-10">
-                    <Link href="/" class="text-gray-600 hover:text-gray-900 transition">Home</Link>
-                    <Link href="#our-story" class="text-gray-600 hover:text-gray-900 transition">Our Story</Link>
-                    <Link href="#events" class="text-gray-600 hover:text-gray-900 transition">Event</Link>
-                    <Link :href="route('menu.index')" class="text-gray-900 font-semibold">Menu</Link>
-                </div>
-
-                <!-- Auth menu di kanan -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <template v-if="!$page.props.auth.user">
-                        <Link v-if="canLogin" :href="route('login')" class="text-sm text-gray-600 hover:text-gray-900">Log in</Link>
-                        <Link v-if="canRegister" :href="route('register')" class="text-sm text-gray-600 hover:text-gray-900">Register</Link>
-                    </template>
-                     <template v-else>
-                         <Link :href="route('dashboard')" class="text-sm text-gray-600 hover:text-gray-900">Dashboard</Link>
-                     </template>
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <!-- Tambahkan tombol hamburger di sini jika perlu -->
-                </div>
-            </nav>
-        </header>
+    <div class="bg-white text-gray-800 min-h-screen flex flex-col">
+        
+        <AppHeader :canLogin="props.canLogin" :canRegister="props.canRegister" />
 
         <main class="pt-16">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-2">
                 <h1 class="text-4xl font-bold text-center mb-10">Menu</h1>
 
                 <div class="flex justify-center mb-8 border-b border-gray-300 dark:border-gray-700">
-                    <button
-                        @click="setActiveTab('makanan')"
-                        :class="[
-                            'py-2 px-6 text-lg font-medium transition duration-150 ease-in-out',
-                            activeTab === 'makanan'
-                                ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 border-b-2 border-transparent'
-                        ]"
-                    >
-                        Makanan
-                    </button>
+                    
                     <button
                         @click="setActiveTab('minuman')"
                         :class="[
@@ -127,9 +82,20 @@ const setActiveSubTab = (subTabName) => {
                     >
                         Minuman
                     </button>
-                </div>
 
-                 <div v-if="activeTab === 'minuman'" class="flex justify-center mb-8 space-x-4">
+                    <button
+                        @click="setActiveTab('makanan')"
+                        :class="[
+                            'py-2 px-6 text-lg font-medium transition duration-150 ease-in-out',
+                            activeTab === 'makanan'
+                                ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400'
+                                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 border-b-2 border-transparent'
+                        ]"
+                    >
+                        Makanan
+                    </button>
+                </div>
+                <div v-if="activeTab === 'minuman'" class="flex justify-center mb-8 space-x-4">
                     <button
                         @click="setActiveSubTab('kopi')"
                         :class="[
@@ -179,14 +145,7 @@ const setActiveSubTab = (subTabName) => {
             </div>
         </main>
 
-        <footer class="bg-gray-800 dark:bg-black text-gray-400 dark:text-gray-500 py-8 px-4 text-center mt-auto">
-            <div class="mb-4">
-                <a href="#" class="inline-block mx-2 hover:text-white dark:hover:text-gray-300">FB</a>
-                <a href="#" class="inline-block mx-2 hover:text-white dark:hover:text-gray-300">IG</a>
-                <a href="#" class="inline-block mx-2 hover:text-white dark:hover:text-gray-300">TW</a>
-            </div>
-            <p class="text-sm">&copy; {{ new Date().getFullYear() }} Kubikal Space. All rights reserved.</p>
-        </footer>
+        <AppFooter />
     </div>
 
     <MenuDetailModal :show="showMenuModal" :menu="selectedMenu" @close="closeMenuModal" />
