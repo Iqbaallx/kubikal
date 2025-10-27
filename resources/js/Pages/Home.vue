@@ -2,30 +2,65 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import MenuDetailModal from '@/Components/MenuDetailModal.vue';
-import AppHeader from '@/Components/AppHeader.vue'; // <-- DIUBAH: Import AppHeader
-import AppFooter from '@/Components/AppFooter.vue'; // <-- DIUBAH: Import AppFooter
+import EventDetailModal from '@/Components/EventDetailModal.vue'; // <-- DITAMBAHKAN: Import modal event
+import AppHeader from '@/Components/AppHeader.vue';
+import AppFooter from '@/Components/AppFooter.vue';
 
-// <-- DIUBAH: Menambahkan props untuk AppHeader
 defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
 });
 
-// State untuk modal
+// State untuk modal menu
 const showMenuModal = ref(false);
 const selectedMenu = ref(null);
 
-// Fungsi untuk membuka modal
+// <-- DITAMBAHKAN: State untuk modal event -->
+const showEventModal = ref(false);
+const selectedEvent = ref(null);
+
+// Fungsi untuk membuka modal menu
 const openMenuModal = (menuData) => {
     selectedMenu.value = menuData;
     showMenuModal.value = true;
 };
 
-// Fungsi untuk menutup modal
+// Fungsi untuk menutup modal menu
 const closeMenuModal = () => {
     showMenuModal.value = false;
-    selectedMenu.value = null; // Reset menu yang dipilih
+    selectedMenu.value = null;
 };
+
+// <-- DITAMBAHKAN: Fungsi untuk modal event -->
+const openEventModal = (eventData) => {
+    selectedEvent.value = eventData;
+    showEventModal.value = true;
+};
+
+const closeEventModal = () => {
+    showEventModal.value = false;
+    selectedEvent.value = null;
+};
+
+// <-- DITAMBAHKAN: Data event (contoh) -->
+// Nantinya, data ini sebaiknya dikirim dari Controller Laravel sebagai props
+const events = ref([
+    {
+        name: 'Live Acoustic Night',
+        description: 'Setiap Jumat malam, nikmati alunan musik akustik santai sambil menikmati kopi favoritmu.',
+        image: '/images/1.jpg'
+    },
+    {
+        name: 'Latte Art Workshop',
+        description: 'Pelajari seni membuat latte art yang indah bersama barista kami. Terbatas!',
+        image: '/images/1.jpg'
+    },
+    {
+        name: 'Holiday Specials Tasting',
+        description: 'Cicipi menu spesial liburan kami yang baru, mulai dari minuman hingga makanan penutup.',
+        image: '/images/1.jpg'
+    }
+]);
 </script>
 
 <template>
@@ -36,7 +71,7 @@ const closeMenuModal = () => {
         <AppHeader :canLogin="canLogin" :canRegister="canRegister" />
 
         <main>
-            <section class="relative h-screen bg-cover bg-center" style="background-image: url('/images/hero-background.jpg')">
+            <section class="relative h-screen bg-cover bg-center" style="background-image: url('/images/HeroSelection.png');">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-center text-white">
                     <div>
                         <h1 class="text-4xl md:text-6xl font-bold mb-4">Crafted Coffee & Delicious Bites</h1>
@@ -52,18 +87,19 @@ const closeMenuModal = () => {
             <section id="our-story" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
                     <div class="w-full md:w-1/2">
-                        <img src="/images/our-story-image.jpg" alt="Our Story"
+                        <img src="/images/About.png" alt="Our Story"
                             class="rounded-lg shadow-lg w-full h-64 md:h-80 object-cover bg-gray-300 dark:bg-gray-700">
                     </div>
                     <div class="w-full md:w-1/2 text-center md:text-left">
                         <h2 class="text-3xl font-bold mb-4">Our Story</h2>
                         <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-                            Didirikan pada tahun 20xx, Kubikal Space lahir dari kecintaan terhadap kopi berkualitas dan keinginan untuk
-                            menciptakan ruang komunitas yang hangat. Kami percaya pada kekuatan secangkir kopi untuk menghubungkan orang
-                            dan menginspirasi momen.
+                            Kami percaya, setiap cangkir kopi punya cerita.
+                            Kopi kami berasal dari biji pilihan Makassar, dikenal dengan aroma yang khas dan rasa 
+                            yang berani — hasil bumi yang dirawat dengan cinta oleh petani lokal.
                             <br><br>
-                            Kami berkomitmen untuk menyajikan biji kopi terbaik yang diproses dengan cermat, serta makanan pendamping
-                            yang lezat, dibuat dari bahan-bahan segar pilihan. Datang dan rasakan pengalaman Kubikal Space.
+                            Dari proses sangrai hingga seduhan terakhir, kami ingin menghadirkan pengalaman ngopi 
+                            yang otentik, hangat, dan penuh karakter.
+                            Inilah cita rasa Makassar, dalam setiap tegukan.
                         </p>
                     </div>
                 </div>
@@ -104,28 +140,13 @@ const closeMenuModal = () => {
                     <h2 class="text-3xl font-bold mb-8">Upcoming Events</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div
-                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transform transition duration-300 hover:-translate-y-2">
-                            <img src="/images/event-acoustic.jpg" alt="Live Acoustic Night"
+                            v-for="(event, index) in events" :key="index"
+                            @click="openEventModal(event)"
+                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transform transition duration-300 hover:-translate-y-2 cursor-pointer">
+                            <img :src="event.image" :alt="event.name"
                                 class="rounded-md mb-4 w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
-                            <h3 class="text-xl font-semibold mb-2">Live Acoustic Night</h3>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Setiap Jumat malam, nikmati alunan musik akustik santai
-                                sambil menikmati kopi favoritmu.</p>
-                        </div>
-                        <div
-                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transform transition duration-300 hover:-translate-y-2">
-                            <img src="/images/event-latte-art.jpg" alt="Latte Art Workshop"
-                                class="rounded-md mb-4 w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
-                            <h3 class="text-xl font-semibold mb-2">Latte Art Workshop</h3>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Pelajari seni membuat latte art yang indah bersama
-                                barista kami. Terbatas!</p>
-                        </div>
-                        <div
-                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transform transition duration-300 hover:-translate-y-2">
-                            <img src="/images/event-tasting.jpg" alt="Holiday Specials Tasting"
-                                class="rounded-md mb-4 w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
-                            <h3 class="text-xl font-semibold mb-2">Holiday Specials Tasting</h3>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Cicipi menu spesial liburan kami yang baru, mulai dari
-                                minuman hingga makanan penutup.</p>
+                            <h3 class="text-xl font-semibold mb-2">{{ event.name }}</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{{ event.description }}</p>
                         </div>
                     </div>
                 </div>
@@ -190,16 +211,29 @@ const closeMenuModal = () => {
     </div>
 
     <MenuDetailModal :show="showMenuModal" :menu="selectedMenu" @close="closeMenuModal" />
+
+    <EventDetailModal :show="showEventModal" :event="selectedEvent" @close="closeEventModal" />
 </template>
 
 <style scoped>
-/* Tambahkan style khusus jika diperlukan */
 .h-screen {
     height: 100vh;
 }
 
-/* DIUBAH: Menambahkan style untuk gambar menu best seller */
 .menu-item img {
-    aspect-ratio: 1 / 1; /* Membuat gambar tetap persegi */
+    aspect-ratio: 1 / 1;
+}
+
+/* DITAMBAHKAN: Style untuk card event */
+.event-card img {
+    aspect-ratio: 16 / 9; /* Menyesuaikan rasio gambar event */
+}
+
+/* DITAMBAHKAN: Class untuk membatasi teks deskripsi */
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 </style>
