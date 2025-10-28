@@ -153,58 +153,66 @@ const events = ref([
             </section>
 
             <section class="py-16 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
-                <div class="container mx-auto text-center">
-                    <h2 class="text-3xl font-bold mb-8">Our Best Sellers</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                <div class="container mx-auto">
+                    <h2 class="text-3xl font-bold mb-12 text-center">Our Best Sellers</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
                         
                         <div
                             @click="openMenuModal({ name: 'Cappuccino', price: 'Rp 25.000', description: 'Kopi susu klasik dengan foam lembut dan taburan cokelat di atasnya. Menggunakan espresso berkualitas tinggi dipadu dengan susu segar.', image: '/images/menu-cappuccino.jpg' })"
-                            class="menu-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:-translate-y-2 cursor-pointer">
-                            <img src="/images/menu-cappuccino.jpg" alt="Cappuccino" class="w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                            <div class="aspect-square overflow-hidden">
+                                <img src="/images/menu-cappuccino.jpg" alt="Cappuccino" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                            </div>
                             <div class="p-4">
-                                <h4 class="font-semibold">Cappuccino</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Rp 25.000</p>
+                                <h4 class="font-bold text-base mb-1">Cappuccino</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">Classic espresso with steamed milk and a foamy top</p>
                             </div>
                         </div>
                         
                         <div
                             @click="openMenuModal({ name: 'Latte', price: 'Rp 25.000', description: 'Perpaduan espresso dan susu steamed dengan sedikit lapisan foam di atasnya.', image: '/images/menu-latte.jpg' })"
-                            class="menu-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:-translate-y-2 cursor-pointer">
-                            <img src="/images/menu-latte.jpg" alt="Latte" class="w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                            <div class="aspect-square overflow-hidden">
+                                <img src="/images/menu-latte.jpg" alt="Latte" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                            </div>
                             <div class="p-4">
-                                <h4 class="font-semibold">Latte</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Rp 25.000</p>
+                                <h4 class="font-bold text-base mb-1">Latte</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">Espresso with steamed milk and a thin layer of foam</p>
                             </div>
                         </div>
 
                         <div
                             @click="openMenuModal({ name: 'Espresso', price: 'Rp 20.000', description: 'Ekstraksi kopi murni dengan crema tebal, dasar dari banyak minuman kopi.', image: '/images/menu-espresso.jpg' })"
-                            class="menu-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:-translate-y-2 cursor-pointer">
-                            <img src="/images/menu-espresso.jpg" alt="Espresso" class="w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                            <div class="aspect-square overflow-hidden">
+                                <img src="/images/menu-espresso.jpg" alt="Espresso" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                            </div>
                             <div class="p-4">
-                                <h4 class="font-semibold">Espresso</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Rp 20.000</p>
+                                <h4 class="font-bold text-base mb-1">Espresso</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">Strong, concentrated coffee served in a small cup</p>
                             </div>
                         </div>
 
                         <div
                             @click="openMenuModal({ name: 'Cold Brew', price: 'Rp 30.000', description: 'Kopi yang diseduh dengan air dingin selama berjam-jam, menghasilkan rasa yang halus dan rendah asam.', image: '/images/menu-cold-brew.jpg' })"
-                            class="menu-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:-translate-y-2 cursor-pointer">
-                            <img src="/images/menu-cold-brew.jpg" alt="Cold Brew" class="w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                            <div class="aspect-square overflow-hidden">
+                                <img src="/images/2.jpg" alt="Cold Brew" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                            </div>
                             <div class="p-4">
-                                <h4 class="font-semibold">Cold Brew</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Rp 30.000</p>
+                                <h4 class="font-bold text-base mb-1">Cold Brew</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">Smooth, low-acid coffee steeped for 12-24 hours</p>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-8 flex justify-end">
+                    <div class="mt-10 flex justify-end">
                         <Link :href="route('menu.index')"
-                            class="bg-gray-800 text-white dark:bg-gray-600 dark:text-gray-200 py-2 px-5 rounded-md font-semibold hover:bg-gray-700 dark:hover:bg-gray-500 transition duration-300">
-                        More Menu
+                            class="bg-gray-800 text-white dark:bg-gray-600 dark:text-gray-200 py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 dark:hover:bg-gray-500 transition duration-300 shadow-md">
+                        more menu
                         </Link>
                     </div>
                 </div>
-            </section>
+            </section>  
         </main>
 
         <AppFooter class="mt-auto" />
