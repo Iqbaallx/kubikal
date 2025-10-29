@@ -47,16 +47,19 @@ const closeEventModal = () => {
 const events = ref([
     {
         name: 'Live Acoustic Night',
+        date: '2024-07-12',
         description: 'Setiap Jumat malam, nikmati alunan musik akustik santai sambil menikmati kopi favoritmu.',
         image: '/images/1.jpg'
     },
     {
         name: 'Latte Art Workshop',
+        date: '2024-07-20',
         description: 'Pelajari seni membuat latte art yang indah bersama barista kami. Terbatas!',
         image: '/images/1.jpg'
     },
     {
         name: 'Holiday Specials Tasting',
+        date: '2024-12-15',
         description: 'Cicipi menu spesial liburan kami yang baru, mulai dari minuman hingga makanan penutup.',
         image: '/images/1.jpg'
     }
@@ -129,8 +132,8 @@ const events = ref([
                             </svg>
                             <h3 class="text-xl font-semibold">Lokasi</h3>
                         </div>
-                        <p class="text-gray-600 dark:text-gray-400">Jl. Merdeka No. 123, Boyolali, Jawa Tengah</p>
-                        <a href="#" class="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">Lihat Peta</a>
+                        <p class="text-gray-600 dark:text-gray-400">Jl. Surya I No.1, Jebres, Kec. Jebres, Kota Surakarta, Jawa Tengah 57126</p>
+                        <a href="https://www.google.com/maps/@-7.5542516,110.855285,3a,75y,201.25h,40.21t/data=!3m7!1e1!3m5!1sPfOHgCHtquv_pJAP3XRBRw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D49.7924544664621%26panoid%3DPfOHgCHtquv_pJAP3XRBRw%26yaw%3D201.2471147394687!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTAyNi4wIKXMDSoASAFQAw%3D%3D" class="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">Lihat Peta</a>
                     </div>
                 </div>
             </section>
