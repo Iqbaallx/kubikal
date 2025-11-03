@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Get current tab from query parameter (default: menu)
+        $currentTab = $request->query('tab', 'menu');
+        
         // TODO: Ganti dengan query database sebenarnya
         // Contoh: $menus = Menu::all();
         
-        // Data dummy untuk sementara
+        // Data dummy untuk menu
         $menus = [
             [
                 'id' => 1,
@@ -79,7 +82,8 @@ class DashboardController extends Controller
         return Inertia::render('Admin/Dashboard', [
             'menus' => $menus,
             'stats' => $stats,
-            'event' => $event
+            'event' => $event,
+            'currentTab' => $currentTab // Pass current tab to frontend
         ]);
     }
 }
