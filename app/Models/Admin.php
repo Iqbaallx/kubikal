@@ -1,38 +1,24 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
-class Admin extends Authenticatable
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Admin extends Model
 {
-    // TAMBAHKAN INI
-    use Notifiable;
+    use HasFactory;
 
-    /**
-     * Tentukan guard yang akan digunakan oleh model ini.
-     */
-    protected $guard = 'admin';
+    protected $table = 'admin';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'username', // Pastikan ini ada di tabel Anda
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 }
