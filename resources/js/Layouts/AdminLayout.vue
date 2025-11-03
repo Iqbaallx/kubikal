@@ -1,12 +1,10 @@
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-    <!-- Fixed Sidebar -->
+  <div class="min-h-screen" style="background: linear-gradient(0deg, #F5F5F4, #F5F5F4), #FFFFFF;">
+    <!-- Sidebar - Fixed -->
     <Sidebar />
     
-    <!-- Main Content with margin for sidebar -->
-    <div class="flex-1 ml-44">
-      <slot />
-    </div>
+    <!-- Main Content Area -->
+    <slot />
   </div>
 </template>
 

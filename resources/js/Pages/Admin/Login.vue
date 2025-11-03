@@ -13,7 +13,7 @@ defineProps({
 });
 
 const form = useForm({
-    username: '', // atau 'email' jika menggunakan email
+    email: '', // atau 'email' jika menggunakan email
     password: '',
     remember: false,
 });
@@ -47,7 +47,7 @@ const submit = () => {
 
             <form @submit.prevent="submit" class="space-y-6">
                 <div>
-                    <InputLabel for="username" value="Username" class="dark:text-gray-300" />
+                    <InputLabel for="email" value="Email" class="dark:text-gray-300" />
                     <div class="relative mt-1">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -56,12 +56,12 @@ const submit = () => {
                                     d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                             </svg>
                         </span>
-                        <TextInput id="username" type="text"
+                        <TextInput id="email" type="email"
                             class="block w-full rounded-md border-gray-300 bg-gray-200 pl-10 pr-4 py-2 text-gray-700 placeholder-gray-500 focus:border-indigo-500 focus:bg-white focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 dark:focus:border-indigo-600 dark:focus:bg-gray-900 dark:focus:ring-indigo-600"
-                            v-model="form.username" required autofocus autocomplete="username"
+                            v-model="form.email" required autofocus autocomplete="email"
                             placeholder="Masukkan username Anda" />
                     </div>
-                    <InputError class="mt-2" :message="form.errors.username || form.errors.email" />
+                    <InputError class="mt-2" :message="form.errors.email" /> 
                 </div>
 
                 <div>

@@ -33,13 +33,13 @@ class AdminLoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $request->validate([
-            'username' => 'required|string', // Pastikan ini 'username'
+            'email' => 'required|string', // Pastikan ini 'username'
             'password' => 'required|string',
         ]);
 
         // Sesuaikan field yang digunakan untuk login
         // Sesuaikan juga nama guard ('admin')
-        if (Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password], $request->filled('remember'))) {
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->filled('remember'))) {
             $request->session()->regenerate();
 
             return redirect()->intended(route('admin.dashboard'));
@@ -47,7 +47,7 @@ class AdminLoginController extends Controller
 
         // Jika login gagal
         throw ValidationException::withMessages([
-            'username' => [trans('auth.failed')], // Pesan error standar Laravel
+            'email' => [trans('auth.failed')], // Pesan error standar Laravel
         ]);
     }
 
