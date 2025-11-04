@@ -110,7 +110,7 @@ const closeEventModal = () => {
                         <p class="text-gray-600 dark:text-gray-400">
                             Jl. Surya I No.1, Jebres, Kota Surakarta, Jawa Tengah 57126
                         </p>
-                        <a href="https://maps.app.goo.gl/DvWZQJ2hJmx9Z3dR8"
+                        <a href="https://www.google.com/maps/place/Jl.+Surya+I+No.1,+Jebres,+Kec.+Jebres,+Kota+Surakarta,+Jawa+Tengah+57126/@-7.5542516,110.855285,3a,75y,200.26h,82.94t/data=!3m7!1e1!3m5!1sPfOHgCHtquv_pJAP3XRBRw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D7.059807565462236%26panoid%3DPfOHgCHtquv_pJAP3XRBRw%26yaw%3D200.2611445012532!7i16384!8i8192!4m6!3m5!1s0x2e7a16e28f4322ed:0x1d0fcf54c90429e7!8m2!3d-7.5541224!4d110.8544949!16s%2Fg%2F11t5_zfjw3?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D"
                            class="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">
                            Lihat Peta
                         </a>
