@@ -49,19 +49,19 @@ const events = ref([
         name: 'Live Acoustic Night',
         date: '2024-07-12',
         description: 'Setiap Jumat malam, nikmati alunan musik akustik santai sambil menikmati kopi favoritmu.',
-        image: '/images/1.jpg'
+        image: '/images/live.jpg'
     },
     {
         name: 'Latte Art Workshop',
         date: '2024-07-20',
         description: 'Pelajari seni membuat latte art yang indah bersama barista kami. Terbatas!',
-        image: '/images/1.jpg'
+        image: '/images/art.jpg'
     },
     {
         name: 'Holiday Specials Tasting',
         date: '2024-12-15',
         description: 'Cicipi menu spesial liburan kami yang baru, mulai dari minuman hingga makanan penutup.',
-        image: '/images/1.jpg'
+        image: '/images/holi.jpg'
     }
 ]);
 </script>
@@ -164,7 +164,7 @@ const events = ref([
                             @click="openMenuModal({ name: 'Cappuccino', price: 'Rp 25.000', description: 'Kopi susu klasik dengan foam lembut dan taburan cokelat di atasnya. Menggunakan espresso berkualitas tinggi dipadu dengan susu segar.', image: '/images/menu-cappuccino.jpg' })"
                             class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
                             <div class="aspect-square overflow-hidden">
-                                <img src="/images/menu-cappuccino.jpg" alt="Cappuccino" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                                <img src="/images/capucino.jpg" alt="Cappuccino" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
                             </div>
                             <div class="p-4">
                                 <h4 class="font-bold text-base mb-1">Cappuccino</h4>
@@ -176,7 +176,7 @@ const events = ref([
                             @click="openMenuModal({ name: 'Latte', price: 'Rp 25.000', description: 'Perpaduan espresso dan susu steamed dengan sedikit lapisan foam di atasnya.', image: '/images/menu-latte.jpg' })"
                             class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
                             <div class="aspect-square overflow-hidden">
-                                <img src="/images/menu-latte.jpg" alt="Latte" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                                <img src="/images/latte.jpg" alt="Latte" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
                             </div>
                             <div class="p-4">
                                 <h4 class="font-bold text-base mb-1">Latte</h4>
@@ -188,7 +188,7 @@ const events = ref([
                             @click="openMenuModal({ name: 'Espresso', price: 'Rp 20.000', description: 'Ekstraksi kopi murni dengan crema tebal, dasar dari banyak minuman kopi.', image: '/images/menu-espresso.jpg' })"
                             class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
                             <div class="aspect-square overflow-hidden">
-                                <img src="/images/menu-espresso.jpg" alt="Espresso" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                                <img src="/images/expres.jpg" alt="Espresso" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
                             </div>
                             <div class="p-4">
                                 <h4 class="font-bold text-base mb-1">Espresso</h4>
@@ -200,7 +200,7 @@ const events = ref([
                             @click="openMenuModal({ name: 'Cold Brew', price: 'Rp 30.000', description: 'Kopi yang diseduh dengan air dingin selama berjam-jam, menghasilkan rasa yang halus dan rendah asam.', image: '/images/menu-cold-brew.jpg' })"
                             class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
                             <div class="aspect-square overflow-hidden">
-                                <img src="/images/2.jpg" alt="Cold Brew" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
+                                <img src="/images/cold.jpg" alt="Cold Brew" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
                             </div>
                             <div class="p-4">
                                 <h4 class="font-bold text-base mb-1">Cold Brew</h4>
