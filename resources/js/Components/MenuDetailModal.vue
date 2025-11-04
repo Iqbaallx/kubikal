@@ -1,29 +1,63 @@
 <template>
   <Modal :show="show" @close="close" maxWidth="lg">
-    <div class="p-6">
+    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg">
+      <!-- Judul -->
       <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Detail Menu</h2>
+
       <div class="flex flex-col md:flex-row gap-6">
+        <!-- Gambar Menu -->
         <div class="w-full md:w-1/3">
-          <img :src="menu?.image || defaultImage" :alt="menu?.name || 'Menu Item'" class="rounded-lg shadow-md w-full h-48 object-cover bg-gray-300 dark:bg-gray-700">
+          <img
+            :src="item?.gambar_url || defaultImage"
+            :alt="item?.nama_menu || 'Menu Item'"
+            class="rounded-lg shadow-md w-full h-48 object-cover bg-gray-300 dark:bg-gray-700"
+          >
+          <!-- Rating Dummy -->
           <div class="flex justify-start items-center mt-2">
-             <span v-for="n in 2" :key="n" class="text-yellow-400">★</span>
-             <span v-for="n in 3" :key="n" class="text-gray-300">★</span>
+            <span v-for="n in 2" :key="n" class="text-yellow-400">★</span>
+            <span v-for="n in 3" :key="n" class="text-gray-300">★</span>
           </div>
         </div>
+
+        <!-- Detail Menu -->
         <div class="w-full md:w-2/3">
-          <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">{{ menu?.name || 'Nama Menu' }}</h3>
-           <span class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-xs font-semibold px-2 py-0.5 rounded mb-3">Minuman</span> <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            {{ item?.nama_menu || 'Nama Menu' }}
+          </h3>
+
+          <!-- Kategori -->
+          <span class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-xs font-semibold px-2 py-0.5 rounded mb-3">
+            {{ formatCategory(item?.kategori) || 'Kategori' }}
+          </span>
+
+          <!-- Harga -->
+          <div class="mb-4">
             <p class="text-sm text-gray-500 dark:text-gray-400">Harga</p>
-            <p class="text-lg font-bold text-orange-600 dark:text-orange-400">{{ menu?.price || 'Harga' }}</p>
+            <p class="text-lg font-bold text-orange-600 dark:text-orange-400">
+              {{ formatCurrency(item?.harga_menu) || 'Rp 0' }}
+            </p>
           </div>
+
+          <!-- Deskripsi -->
           <div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Keterangan</p>
-            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ menu?.description || 'Deskripsi menu...' }}</p>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {{ item?.deskripsi_menu || 'Deskripsi menu belum tersedia.' }}
+            </p>
           </div>
         </div>
       </div>
-      <div class="mt-6 text-xs text-gray-500 dark:text-gray-400 border-t pt-4 dark:border-gray-600">
-        <p>Ditambahkan: 15 Jan 2025</p> <p>Terakhir diubah: 20 Sep 2025, 14:30</p> </div>
+
+      <!-- Informasi Tanggal -->
+      <div
+        v-if="item?.created_at || item?.updated_at"
+        class="mt-6 text-xs text-gray-500 dark:text-gray-400 border-t pt-4 dark:border-gray-600"
+      >
+        <p v-if="item.created_at">Ditambahkan: {{ formatDate(item.created_at) }}</p>
+        <p v-if="item.updated_at">Terakhir diubah: {{ formatDateTime(item.updated_at) }}</p>
+      </div>
+
+      <!-- Tombol Tutup -->
       <div class="mt-6 flex justify-end">
         <SecondaryButton @click="close">
           Tutup
@@ -38,20 +72,69 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 defineProps({
-  show: Boolean,
-  menu: Object, // Data menu yang akan ditampilkan
+  show: {
+    type: Boolean,
+    default: false,
+  },
+  item: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
-// Perbaikan dari sebelumnya agar tombol tutup berfungsi
 const emit = defineEmits(['close']);
-
-const defaultImage = ''; // Ganti dengan URL gambar default jika menu.image kosong
+const defaultImage = '/images/placeholder-menu.jpg';
 
 const close = () => {
   emit('close');
 };
+
+// Format kategori, harga, dan tanggal
+const formatCategory = (kategori) => {
+  if (!kategori) return '';
+  const map = {
+    coffee: 'Coffee',
+    'non-coffee': 'Non-Coffee',
+    makanan: 'Makanan',
+    camilan: 'Camilan',
+  };
+  return map[kategori] || kategori;
+};
+
+const formatCurrency = (value) => {
+  if (!value) value = 0;
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(value);
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+};
+
+const formatDateTime = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+};
 </script>
 
 <style scoped>
-/* Style tambahan jika diperlukan */
+img {
+  max-height: 200px;
+}
 </style>

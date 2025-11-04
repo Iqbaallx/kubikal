@@ -23,13 +23,25 @@
                 <span v-else>🎉</span>
               </div>
             </td>
-            <td class="px-6 py-3 text-sm text-gray-900">{{ item.nama_event }}</td>
-            
+            <td class="px-6 py-3 text-sm text-gray-900">
+              <a 
+                href="#" 
+                @click.prevent="showDetail(item)" 
+                class="font-medium text-gray-900 hover:text-amber-600 hover:underline"
+              >
+                {{ item.nama_event }}
+              </a>
+            </td>
             <td class="px-6 py-3 text-sm text-gray-900">{{ formatDate(item.tanggal) }}</td>
             <td class="px-6 py-3 text-sm text-gray-900">{{ formatTime(item.waktu) }}</td>
-
             <td class="px-6 py-3">
               <div class="flex gap-2">
+                <button
+                  @click="showDetail(item)"
+                  class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs"
+                >
+                  Detail
+                </button>
                 <button
                   @click="editItem(item)"
                   class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
@@ -66,51 +78,38 @@ defineProps({
   }
 });
 
-const emit = defineEmits(['edit']);
+// Tambahkan 'show-detail' ke emits
+const emit = defineEmits(['edit', 'show-detail']);
 
-/**
- * ==================================
- * PERBAIKAN: Fungsi formatDate dibuat lebih kuat
- * ==================================
- */
 const formatDate = (dateString) => {
-  // Tangani nilai null, undefined, string "null", atau tanggal default MySQL "0000-00-00"
   if (!dateString || dateString === '0000-00-00' || dateString === 'null') {
     return '-';
   }
-  
   const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
   const date = new Date(dateString);
-  
-  // Cek lagi jika hasilnya masih 'Invalid Date'
   if (isNaN(date.getTime())) {
     return '-';
   }
-  
   return date.toLocaleDateString('id-ID', options);
 };
 
-/**
- * ==================================
- * BARU: Fungsi untuk memformat waktu (HH:mm)
- * ==================================
- */
 const formatTime = (timeString) => {
-  // Tangani nilai null, undefined, atau string "null"
   if (!timeString || timeString === 'null') {
     return '-';
   }
-  
-  // timeString dari DB mungkin "HH:mm:ss", kita hanya mau "HH:mm"
   const parts = timeString.split(':');
   if (parts.length >= 2) {
     return `${parts[0]}:${parts[1]}`;
   }
-  
-  // Fallback jika formatnya aneh
   return timeString;
 };
 
+// ==================================
+// FUNGSI BARU UNTUK MENAMPILKAN DETAIL
+// ==================================
+const showDetail = (item) => {
+  emit('show-detail', item);
+};
 
 const editItem = (item) => {
   emit('edit', item);

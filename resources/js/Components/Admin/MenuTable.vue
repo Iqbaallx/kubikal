@@ -16,7 +16,8 @@
         <tbody>
           <tr 
             v-for="(item, index) in paginatedItems" 
-            :key="item.id_menu" :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
+            :key="item.id_menu"
+            :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
           >
             <td class="px-6 py-3">
               <div class="w-10 h-10 bg-amber-100 rounded flex items-center justify-center text-xl overflow-hidden">
@@ -24,12 +25,20 @@
                 <span v-else>🍽️</span>
               </div>
             </td>
-            <td class="px-6 py-3 text-sm text-gray-900">{{ item.nama_menu }}</td>
+            <td class="px-6 py-3 text-sm text-gray-900">
+              <a 
+                href="#" 
+                @click.prevent="showDetail(item)" 
+                class="font-medium text-gray-900 hover:text-amber-600 hover:underline"
+              >
+                {{ item.nama_menu }}
+              </a>
+            </td>
             <td class="px-6 py-3">
               <span 
                 :class="[
                   'px-3 py-1 rounded-full text-xs',
-                  item.kategori === 'Minuman' ? 'bg-gray-400 text-white' : 'bg-gray-500 text-white'
+                  item.kategori === 'coffee' || item.kategori === 'non-coffee' ? 'bg-gray-400 text-white' : 'bg-gray-500 text-white'
                 ]"
               >
                 {{ item.kategori }}
@@ -38,12 +47,13 @@
             <td class="px-6 py-3 text-sm text-gray-900">
               Rp {{ formatCurrency(item.harga_menu) }}
             </td>
-            <td class="px-6 py-3 text-sm text-gray-600">
+            <td class="px-6 py-3 text-sm text-gray-600 truncate max-w-xs">
               {{ item.deskripsi_menu }}
             </td>
             <td class="px-6 py-3">
               <button 
-                @click="toggleFavorite(item.id_menu)" class="text-xl"
+                @click="toggleFavorite(item.id_menu)"
+                class="text-xl"
               >
                 <span v-if="item.favorit" class="text-yellow-400">⭐</span>
                 <span v-else class="text-gray-300">☆</span>
@@ -52,12 +62,20 @@
             <td class="px-6 py-3">
               <div class="flex gap-2">
                 <button
-                  @click="editItem(item)" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
+                  @click="showDetail(item)"
+                  class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs"
+                >
+                  Detail
+                </button>
+                <button
+                  @click="editItem(item)"
+                  class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
                 >
                   Edit
                 </button>
                 <button
-                  @click="deleteItem(item.id_menu)" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded text-xs"
+                  @click="deleteItem(item.id_menu)"
+                  class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded text-xs"
                 >
                   Hapus
                 </button>
@@ -78,53 +96,14 @@
         Menampilkan {{ startItem }}-{{ endItem }} dari {{ items.length }} menu
       </div>
       <div class="flex gap-2">
-        <button 
-          @click="currentPage--"
-          :disabled="currentPage === 1"
-          :class="[
-            'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
-            currentPage === 1 
-              ? 'opacity-40 cursor-not-allowed bg-gray-200 text-gray-500' 
-              : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-300'
-          ]"
-        >
-          ← Prev
-        </button>
-        
-        <button 
-          v-for="page in visiblePages" 
-          :key="page"
-          @click="currentPage = page"
-          :class="[
-            'px-4 py-2 rounded-lg font-medium text-sm transition-all',
-            currentPage === page 
-              ? 'bg-gray-800 text-white shadow-md' 
-              : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-300'
-          ]"
-        >
-          {{ page }}
-        </button>
-        
-        <button 
-          @click="currentPage++"
-          :disabled="currentPage === totalPages"
-          :class="[
-            'px-4 py-2 rounded-lg font-medium text-sm transition-colors',
-            currentPage === totalPages 
-              ? 'opacity-40 cursor-not-allowed bg-gray-200 text-gray-500' 
-              : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-300'
-          ]"
-        >
-          Next →
-        </button>
-      </div>
+        </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import { router } from '@inertiajs/vue3'; // Import router
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
   items: {
@@ -133,7 +112,8 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['edit']); // Daftarkan event 'edit'
+// Tambahkan 'show-detail' ke emits
+const emit = defineEmits(['edit', 'show-detail']);
 
 const currentPage = ref(1);
 const itemsPerPage = 10;
@@ -149,7 +129,7 @@ const paginatedItems = computed(() => {
 });
 
 const startItem = computed(() => {
-  if (props.items.length === 0) return 0; // Handle jika items kosong
+  if (props.items.length === 0) return 0;
   return (currentPage.value - 1) * itemsPerPage + 1;
 });
 
@@ -174,7 +154,6 @@ const visiblePages = computed(() => {
 });
 
 const formatCurrency = (value) => {
-  // Tambahkan 'null' check
   if (value === null || value === undefined) {
     value = 0;
   }
@@ -182,23 +161,33 @@ const formatCurrency = (value) => {
 };
 
 const toggleFavorite = (id) => {
-  // Gunakan router dari Inertia
   router.post(route('admin.menu.toggle-favorite', id), {}, {
-    preserveScroll: true // Agar halaman tidak scroll ke atas
+    preserveScroll: true
   });
 };
 
 const editItem = (item) => {
-  // Kirim data 'item' ke parent (Dashboard.vue)
   emit('edit', item);
+};
+
+// Fungsi ini dipanggil oleh nama DAN tombol "Detail"
+const showDetail = (item) => {
+  emit('show-detail', item);
 };
 
 const deleteItem = (id) => {
   if (confirm('Yakin ingin menghapus menu ini?')) {
-    // Gunakan router dari Inertia
     router.delete(route('admin.menu.destroy', id), {
-      preserveScroll: true // Agar halaman tidak scroll ke atas
+      preserveScroll: true
     });
   }
 };
 </script>
+
+<style scoped>
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>

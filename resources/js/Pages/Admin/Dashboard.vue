@@ -46,7 +46,8 @@
                   <span>Tambah Menu Baru</span>
                 </button>
               </div>
-              <MenuTable :items="menus" @edit="openEditModal" />
+              
+              <MenuTable :items="menus" @edit="openEditModal" @show-detail="handleShowMenuDetail" />
             </div>
 
             <div v-show="activeTab === 'event'">
@@ -59,7 +60,8 @@
                   <span>Tambah Event Baru</span>
                 </button>
               </div>
-              <EventTable :items="events" @edit="openEditEventModal" />
+              
+              <EventTable :items="events" @edit="openEditEventModal" @show-detail="handleShowEventDetail" />
             </div>
             
           </div>
@@ -101,7 +103,7 @@
                   <select id="kategori" v-model="form.kategori" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                     <option value="makanan">Makanan</option>
                     <option value="camilan">Camilan</option>
-                    <option value="coffee">Coffee</option>
+                    <option value="coffee">Coffee</option> 
                     <option value="non-coffee">Non-Coffee</option>
                   </select>
                   <InputError :message="form.errors.kategori" class="mt-2" />
@@ -144,22 +146,18 @@
             <h3 class="text-xl font-bold">{{ isEditingEvent ? 'Edit Event' : 'Tambah Event Baru' }}</h3>
             <button @click="closeEventModal" class="text-white hover:text-gray-300 text-2xl leading-none">×</button>
           </div>
-          
           <form @submit.prevent="submitEvent" class="p-6">
             <div class="space-y-4">
-              
               <div>
                 <InputLabel for="nama_event" value="Nama Event" />
                 <TextInput id="nama_event" v-model="formEvent.nama_event" type="text" class="mt-1 block w-full" required />
                 <InputError :message="formEvent.errors.nama_event" class="mt-2" />
               </div>
-
               <div>
                 <InputLabel for="deskripsi_event" value="Deskripsi" />
                 <textarea id="deskripsi_event" v-model="formEvent.deskripsi_event" rows="4" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required></textarea>
                 <InputError :message="formEvent.errors.deskripsi_event" class="mt-2" />
               </div>
-
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <InputLabel for="tanggal" value="Tanggal Event" /> 
@@ -172,7 +170,6 @@
                   <InputError :message="formEvent.errors.waktu" class="mt-2" />
                 </div>
               </div>
-
               <div>
                 <InputLabel for="gambar_event" value="Gambar Event" />
                 <input id="gambar_event" type="file" @input="formEvent.gambar_event = $event.target.files[0]" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200" />
@@ -184,7 +181,6 @@
                 <InputError :message="formEvent.errors.gambar_event" class="mt-2" />
               </div>
             </div>
-
             <div class="flex justify-end gap-4 pt-6 mt-6 border-t">
               <button type="button" @click="closeEventModal" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2.5 rounded-lg text-sm">Batal</button>
               <button type="submit" :disabled="formEvent.processing" class="bg-gray-700 hover:bg-gray-800 text-white px-5 py-2.5 rounded-lg text-sm transition-colors" :class="{ 'opacity-50 cursor-not-allowed': formEvent.processing }">
@@ -195,6 +191,23 @@
         </div>
       </div>
     </Teleport>
+
+    <Teleport to="body">
+      <MenuDetailModal 
+        :show="showDetailModal" 
+        :item="selectedMenuItem" 
+        @close="closeDetailModal" 
+      />
+    </Teleport>
+
+    <Teleport to="body">
+      <EventDetailModal 
+        :show="showEventDetailModal" 
+        :item="selectedEventItem" 
+        @close="closeEventDetailModal" 
+      />
+    </Teleport>
+
   </AdminLayout>
 </template>
 
@@ -207,6 +220,11 @@ import EventTable from '@/Components/Admin/EventTable.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+// ==================================
+// IMPORT KEDUA MODAL DETAIL
+// ==================================
+import MenuDetailModal from '@/Components/MenuDetailModal.vue'; //
+import EventDetailModal from '@/Components/EventDetailModal.vue'; //
 
 const props = defineProps({
   menus: { type: Array, required: true },
@@ -230,7 +248,8 @@ const initials = computed(() => {
   return admin.name.split(' ').map(word => word[0]).join('').toUpperCase().substring(0, 2);
 });
 
-// === LOGIKA MODAL MENU (Sudah Benar) ===
+
+// === LOGIKA MODAL MENU (EDIT/TAMBAH) (Termasuk perbaikan pre-fill) ===
 const showAddMenuModal = ref(false);
 const isEditing = ref(false);
 const form = useForm({
@@ -243,12 +262,14 @@ const form = useForm({
   gambar_menu: null,
   gambar_url: null,
 });
+
 const openAddModal = () => {
   isEditing.value = false;
   form.reset();
   form.kategori = 'makanan';
   showAddMenuModal.value = true;
 };
+
 const openEditModal = (menu) => {
   isEditing.value = true;
   form.id_menu = menu.id_menu;
@@ -256,16 +277,18 @@ const openEditModal = (menu) => {
   form.deskripsi_menu = menu.deskripsi_menu;
   form.harga_menu = menu.harga_menu;
   form.kategori = menu.kategori;
-  form.favorit = menu.favorit;
+  form.favorit = menu.favorit; // 'favorit' dari props sudah boolean karena Cast
   form.gambar_menu = null;
   form.gambar_url = menu.gambar_url;
   showAddMenuModal.value = true;
 };
+
 const closeModal = () => {
   showAddMenuModal.value = false;
   form.reset();
   form.clearErrors();
 };
+
 const submitMenu = () => {
   if (isEditing.value) {
     form.put(route('admin.menu.update', form.id_menu), {
@@ -280,19 +303,16 @@ const submitMenu = () => {
   }
 };
 
-// ==================================
-// === LOGIKA MODAL EVENT (PERBAIKAN) ===
-// ==================================
+
+// === LOGIKA MODAL EVENT (EDIT/TAMBAH) (Termasuk perbaikan pre-fill) ===
 const showEventModal = ref(false);
 const isEditingEvent = ref(false);
-
-// Ganti nama field agar sesuai dengan database
 const formEvent = useForm({
   id_event: null,
   nama_event: '',
   deskripsi_event: '',
-  tanggal: '', // <-- PERBAIKAN
-  waktu: '',   // <-- PERBAIKAN
+  tanggal: '', // Perbaikan pre-fill
+  waktu: '',   // Perbaikan pre-fill
   gambar_event: null,
   gambar_url: null,
 });
@@ -308,8 +328,8 @@ const openEditEventModal = (event) => {
   formEvent.id_event = event.id_event;
   formEvent.nama_event = event.nama_event;
   formEvent.deskripsi_event = event.deskripsi_event;
-  formEvent.tanggal = event.tanggal; // <-- PERBAIKAN
-  formEvent.waktu = event.waktu;   // <-- PERBAIKAN
+  formEvent.tanggal = event.tanggal; // Perbaikan pre-fill
+  formEvent.waktu = event.waktu;   // Perbaikan pre-fill
   formEvent.gambar_event = null; 
   formEvent.gambar_url = event.gambar_url;
   showEventModal.value = true;
@@ -334,6 +354,35 @@ const submitEvent = () => {
     });
   }
 };
+
+// === LOGIKA MODAL DETAIL (MENU) ===
+const showDetailModal = ref(false);
+const selectedMenuItem = ref(null);
+
+const handleShowMenuDetail = (item) => {
+  selectedMenuItem.value = item;
+  showDetailModal.value = true;
+};
+
+const closeDetailModal = () => {
+  showDetailModal.value = false;
+};
+
+// ==================================
+// LOGIKA BARU UNTUK MODAL DETAIL (EVENT)
+// ==================================
+const showEventDetailModal = ref(false);
+const selectedEventItem = ref(null);
+
+const handleShowEventDetail = (item) => {
+  selectedEventItem.value = item;
+  showEventDetailModal.value = true;
+};
+
+const closeEventDetailModal = () => {
+  showEventDetailModal.value = false;
+};
+
 
 onMounted(() => {
   console.log('Current active tab:', activeTab.value);
