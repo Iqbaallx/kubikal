@@ -27,13 +27,13 @@ Route::get('/menu', function () {
     $menus = [
         // Data dummy publik tetap aman
         'makanan' => [
-            ['id' => 1, 'name' => 'Nasi Goreng Spesial', 'price' => 'Rp 28.000', 'description' => 'Nasi goreng dengan campuran ayam, telur, dan sayuran.', 'image' => '/images/makanan/nasi-goreng.jpg', 'category' => 'Makanan', 'tags' => ['Nasi']],
-            ['id' => 2, 'name' => 'Mie Goreng Seafood', 'price' => 'Rp 32.000', 'description' => 'Mie goreng dengan udang, cumi, dan bakso ikan.', 'image' => '/images/makanan/mie-goreng.jpg', 'category' => 'Makanan', 'tags' => ['Mie']],
+            ['id' => 1, 'name' => 'Nasi Goreng Spesial', 'price' => 'Rp 28.000', 'description' => 'Nasi goreng dengan campuran ayam, telur, dan sayuran.', 'image' => '/images/nasgor.jpg', 'category' => 'Makanan', 'tags' => ['Nasi']],
+            ['id' => 2, 'name' => 'Mie Goreng Seafood', 'price' => 'Rp 32.000', 'description' => 'Mie goreng dengan udang, cumi, dan bakso ikan.', 'image' => '/images/mie.jpg', 'category' => 'Makanan', 'tags' => ['Mie']],
             // ... lainnya ...
         ],
         'minuman' => [
-            ['id' => 6, 'name' => 'Cappuccino', 'price' => 'Rp 25.000', 'description' => 'Kopi susu klasik dengan foam lembut.', 'image' => '/images/minuman/cappuccino.jpg', 'category' => 'Minuman', 'tags' => ['Kopi']],
-            ['id' => 7, 'name' => 'Latte', 'price' => 'Rp 25.000', 'description' => 'Espresso dengan susu steamed.', 'image' => '/images/minuman/latte.jpg', 'category' => 'Minuman', 'tags' => ['Kopi']],
+            ['id' => 6, 'name' => 'Cappuccino', 'price' => 'Rp 25.000', 'description' => 'Kopi susu klasik dengan foam lembut.', 'image' => '/images/capucino.jpg', 'category' => 'Minuman', 'tags' => ['Kopi']],
+            ['id' => 7, 'name' => 'Latte', 'price' => 'Rp 25.000', 'description' => 'Espresso dengan susu steamed.', 'image' => '/images/latte.jpg', 'category' => 'Minuman', 'tags' => ['Kopi']],
             // ... lainnya ...
         ]
     ];
