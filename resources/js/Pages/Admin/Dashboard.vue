@@ -28,7 +28,6 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                   <div class="text-3xl font-semibold mb-1 text-gray-900">{{ stats.totalMenu }}</div>
                   <div class="text-gray-600 text-sm flex items-center gap-2">
-                    <span>📋</span>
                     <span>Total Menu</span>
                   </div>
                 </div>
@@ -36,7 +35,6 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                   <div class="text-3xl font-semibold mb-1 text-gray-900">{{ stats.minuman }}</div>
                   <div class="text-gray-600 text-sm flex items-center gap-2">
-                    <span>🥤</span>
                     <span>Minuman</span>
                   </div>
                 </div>
@@ -44,7 +42,6 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                   <div class="text-3xl font-semibold mb-1 text-gray-900">{{ stats.makanan }}</div>
                   <div class="text-gray-600 text-sm flex items-center gap-2">
-                    <span>🍽️</span>
                     <span>Makanan</span>
                   </div>
                 </div>
@@ -52,7 +49,6 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                   <div class="text-3xl font-semibold mb-1 text-gray-900">{{ stats.favorit }}</div>
                   <div class="text-gray-600 text-sm flex items-center gap-2">
-                    <span>⭐</span>
                     <span>Menu Favorit</span>
                   </div>
                 </div>

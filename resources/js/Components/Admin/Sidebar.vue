@@ -1,13 +1,16 @@
 <template>
   <div class="w-44 bg-white border-r border-gray-200 min-h-screen p-4 flex flex-col fixed left-0 top-0 bottom-0 z-20 shadow-sm">
-    <!-- Logo Section -->
     <div class="flex items-center gap-3 mb-10 px-2">
-      <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-bold text-xl rounded">
-        K
-      </div>
-      <div class="font-semibold text-sm text-gray-900">
-        kubikal Space
-      </div>
+        
+        <img 
+            src="/images/LOGO.png" 
+            alt="Kubikal Logo" 
+            class="w-10 h-10 object-contain"
+        >
+
+        <div class="font-semibold text-sm text-gray-900">
+            kubikal Space
+        </div>
     </div>
     
     <!-- Navigation Menu -->
