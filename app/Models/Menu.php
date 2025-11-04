@@ -11,7 +11,9 @@ class Menu extends Model
 
     protected $table = 'menu';
     protected $primaryKey = 'id_menu';
-    public $timestamps = false;
+    
+    // HAPUS BARIS INI KARENA MIGRATION ANDA MEMILIKI TIMESTAMPS
+    // public $timestamps = false; 
 
     protected $fillable = [
         'nama_menu',
@@ -20,6 +22,15 @@ class Menu extends Model
         'kategori',
         'favorit',
         'gambar_menu',
+    ];
+
+    /**
+     * TAMBAHKAN INI UNTUK MENGUBAH Y/N DARI DATABASE
+     * MENJADI TRUE/FALSE UNTUK VUE.JS
+     */
+    protected $casts = [
+        'favorit' => \App\Casts\YesNoCast::class, // Kita akan buat file cast ini
+        'harga_menu' => 'decimal:2',
     ];
 
     // 🟢 Jika ingin akses URL gambar langsung dari Vue:

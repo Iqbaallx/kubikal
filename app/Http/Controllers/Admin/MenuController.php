@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class MenuController extends Controller
@@ -14,9 +16,6 @@ class MenuController extends Controller
      */
     public function index()
     {
-        // TODO: Ganti dengan query database
-        // $menus = Menu::all();
-        
         return redirect()->route('admin.dashboard');
     }
 
@@ -33,20 +32,21 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi ini sudah benar dari sebelumnya
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'kategori' => 'required|in:Makanan,Minuman',
-            'harga' => 'required|numeric|min:0',
-            'deskripsi' => 'required|string',
-            'foto' => 'nullable|image|max:2048', // Max 2MB
+            'nama_menu' => 'required|string|max:255',
+            'kategori' => 'required|in:coffee,non-coffee,makanan,camilan',
+            'harga_menu' => 'required|numeric|min:0',
+            'deskripsi_menu' => 'required|string',
+            'gambar_menu' => 'nullable|image|max:2048',
             'favorit' => 'boolean'
         ]);
 
-        // TODO: Simpan ke database
-        // if ($request->hasFile('foto')) {
-        //     $validated['foto_path'] = $request->file('foto')->store('menus', 'public');
-        // }
-        // Menu::create($validated);
+        if ($request->hasFile('gambar_menu')) {
+            $validated['gambar_menu'] = $request->file('gambar_menu')->store('menus', 'public');
+        }
+        
+        Menu::create($validated);
 
         return redirect()->route('admin.dashboard')
             ->with('success', 'Menu berhasil ditambahkan!');
@@ -55,21 +55,8 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Menu $menu)
     {
-        // TODO: Ambil data dari database
-        // $menu = Menu::findOrFail($id);
-        
-        $menu = [
-            'id' => $id,
-            'nama' => 'Espresso',
-            'kategori' => 'Minuman',
-            'harga' => 25000,
-            'deskripsi' => 'Kopi susu murni',
-            'favorit' => true,
-            'foto_url' => null
-        ];
-
         return Inertia::render('Admin/Menu/Edit', [
             'menu' => $menu
         ]);
@@ -78,29 +65,34 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Menu $menu)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'kategori' => 'required|in:Makanan,Minuman',
-            'harga' => 'required|numeric|min:0',
-            'deskripsi' => 'required|string',
-            'foto' => 'nullable|image|max:2048',
+            'nama_menu' => 'required|string|max:255',
+            'kategori' => 'required|in:coffee,non-coffee,makanan,camilan',
+            'harga_menu' => 'required|numeric|min:0',
+            'deskripsi_menu' => 'required|string',
+            'gambar_menu' => 'nullable|image|max:2048', // Tetap validasi
             'favorit' => 'boolean'
         ]);
 
-        // TODO: Update database
-        // $menu = Menu::findOrFail($id);
-        // 
-        // if ($request->hasFile('foto')) {
-        //     // Hapus foto lama jika ada
-        //     if ($menu->foto_path) {
-        //         Storage::disk('public')->delete($menu->foto_path);
-        //     }
-        //     $validated['foto_path'] = $request->file('foto')->store('menus', 'public');
-        // }
-        // 
-        // $menu->update($validated);
+        // ==========================================
+        // PERBAIKAN LOGIKA ADA DI SINI
+        // ==========================================
+        if ($request->hasFile('gambar_menu')) {
+            // 1. Jika ada file baru, hapus yang lama dan simpan yang baru
+            if ($menu->gambar_menu) {
+                Storage::disk('public')->delete($menu->gambar_menu);
+            }
+            $validated['gambar_menu'] = $request->file('gambar_menu')->store('menus', 'public');
+        } else {
+            // 2. Jika TIDAK ada file baru, hapus 'gambar_menu' dari array $validated
+            //    agar tidak menimpa data di database dengan null.
+            unset($validated['gambar_menu']);
+        }
+        // ==========================================
+        
+        $menu->update($validated); // Sekarang aman untuk di-update
 
         return redirect()->route('admin.dashboard')
             ->with('success', 'Menu berhasil diupdate!');
@@ -109,17 +101,13 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Menu $menu)
     {
-        // TODO: Hapus dari database
-        // $menu = Menu::findOrFail($id);
-        // 
-        // // Hapus foto jika ada
-        // if ($menu->foto_path) {
-        //     Storage::disk('public')->delete($menu->foto_path);
-        // }
-        // 
-        // $menu->delete();
+        if ($menu->gambar_menu) {
+            Storage::disk('public')->delete($menu->gambar_menu);
+        }
+        
+        $menu->delete();
 
         return redirect()->route('admin.dashboard')
             ->with('success', 'Menu berhasil dihapus!');
@@ -128,12 +116,10 @@ class MenuController extends Controller
     /**
      * Toggle favorite status
      */
-    public function toggleFavorite($id)
+    public function toggleFavorite(Menu $menu)
     {
-        // TODO: Update status favorit di database
-        // $menu = Menu::findOrFail($id);
-        // $menu->favorit = !$menu->favorit;
-        // $menu->save();
+        $menu->favorit = !$menu->favorit; 
+        $menu->save();
 
         return back()->with('success', 'Status favorit berhasil diubah!');
     }

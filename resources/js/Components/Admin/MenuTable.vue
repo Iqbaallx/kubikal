@@ -16,16 +16,15 @@
         <tbody>
           <tr 
             v-for="(item, index) in paginatedItems" 
-            :key="item.id"
-            :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
+            :key="item.id_menu" :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
           >
             <td class="px-6 py-3">
               <div class="w-10 h-10 bg-amber-100 rounded flex items-center justify-center text-xl overflow-hidden">
-                <img v-if="item.foto_url" :src="item.foto_url" alt="" class="w-full h-full object-cover" />
-                <span v-else>{{ item.foto || '🍽️' }}</span>
+                <img v-if="item.gambar_url" :src="item.gambar_url" :alt="item.nama_menu" class="w-full h-full object-cover" />
+                <span v-else>🍽️</span>
               </div>
             </td>
-            <td class="px-6 py-3 text-sm text-gray-900">{{ item.nama }}</td>
+            <td class="px-6 py-3 text-sm text-gray-900">{{ item.nama_menu }}</td>
             <td class="px-6 py-3">
               <span 
                 :class="[
@@ -37,15 +36,14 @@
               </span>
             </td>
             <td class="px-6 py-3 text-sm text-gray-900">
-              Rp {{ formatCurrency(item.harga) }}
+              Rp {{ formatCurrency(item.harga_menu) }}
             </td>
             <td class="px-6 py-3 text-sm text-gray-600">
-              {{ item.deskripsi }}
+              {{ item.deskripsi_menu }}
             </td>
             <td class="px-6 py-3">
               <button 
-                @click="toggleFavorite(item.id)"
-                class="text-xl"
+                @click="toggleFavorite(item.id_menu)" class="text-xl"
               >
                 <span v-if="item.favorit" class="text-yellow-400">⭐</span>
                 <span v-else class="text-gray-300">☆</span>
@@ -54,14 +52,12 @@
             <td class="px-6 py-3">
               <div class="flex gap-2">
                 <button
-                  @click="editItem(item)"
-                  class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
+                  @click="editItem(item)" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
                 >
                   Edit
                 </button>
                 <button
-                  @click="deleteItem(item.id)"
-                  class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded text-xs"
+                  @click="deleteItem(item.id_menu)" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded text-xs"
                 >
                   Hapus
                 </button>
@@ -77,7 +73,6 @@
       </table>
     </div>
 
-    <!-- Pagination -->
     <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-t border-gray-200" v-if="totalPages > 1">
       <div class="text-sm text-gray-600">
         Menampilkan {{ startItem }}-{{ endItem }} dari {{ items.length }} menu
@@ -129,7 +124,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3'; // Import router
 
 const props = defineProps({
   items: {
@@ -138,7 +133,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['edit']);
+const emit = defineEmits(['edit']); // Daftarkan event 'edit'
 
 const currentPage = ref(1);
 const itemsPerPage = 10;
@@ -154,6 +149,7 @@ const paginatedItems = computed(() => {
 });
 
 const startItem = computed(() => {
+  if (props.items.length === 0) return 0; // Handle jika items kosong
   return (currentPage.value - 1) * itemsPerPage + 1;
 });
 
@@ -178,22 +174,31 @@ const visiblePages = computed(() => {
 });
 
 const formatCurrency = (value) => {
+  // Tambahkan 'null' check
+  if (value === null || value === undefined) {
+    value = 0;
+  }
   return new Intl.NumberFormat('id-ID').format(value);
 };
 
 const toggleFavorite = (id) => {
+  // Gunakan router dari Inertia
   router.post(route('admin.menu.toggle-favorite', id), {}, {
-    preserveScroll: true
+    preserveScroll: true // Agar halaman tidak scroll ke atas
   });
 };
 
 const editItem = (item) => {
+  // Kirim data 'item' ke parent (Dashboard.vue)
   emit('edit', item);
 };
 
 const deleteItem = (id) => {
   if (confirm('Yakin ingin menghapus menu ini?')) {
-    router.delete(route('admin.menu.destroy', id));
+    // Gunakan router dari Inertia
+    router.delete(route('admin.menu.destroy', id), {
+      preserveScroll: true // Agar halaman tidak scroll ke atas
+    });
   }
 };
 </script>

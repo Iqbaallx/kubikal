@@ -1,148 +1,104 @@
 <template>
-  <div class="bg-white p-8 rounded-xl shadow-md border border-gray-200">
-    <form @submit.prevent="submitForm" class="max-w-5xl mx-auto">
-      <!-- Row 1: Nama Event & Tanggal -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <label class="block text-sm font-semibold mb-2 text-gray-700">
-            Nama Event <span class="text-red-500">*</span>
-          </label>
-          <input
-            v-model="form.nama"
-            type="text"
-            placeholder="Contoh: Live Music Performance"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all"
-            :class="{ 'border-red-500 ring-2 ring-red-200': form.errors.nama }"
-            required
-          />
-          <p v-if="form.errors.nama" class="text-red-500 text-sm mt-2 flex items-center gap-1">
-            <span>⚠️</span>
-            <span>{{ form.errors.nama }}</span>
-          </p>
-        </div>
+  <div classfs="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+    <form @submit.prevent="submitEvent">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div>
-          <label class="block text-sm font-semibold mb-2 text-gray-700">
-            Tanggal <span class="text-red-500">*</span>
-          </label>
-          <input
-            v-model="form.tanggal"
-            type="date"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all"
-            :class="{ 'border-red-500 ring-2 ring-red-200': form.errors.tanggal }"
-            required
-          />
-          <p v-if="form.errors.tanggal" class="text-red-500 text-sm mt-2 flex items-center gap-1">
-            <span>⚠️</span>
-            <span>{{ form.errors.tanggal }}</span>
-          </p>
-        </div>
-      </div>
+        <div class="space-y-5">
+          <div>
+            <label for="nama_event" class="block text-sm font-medium text-gray-700 mb-1">Nama Event</label>
+            <input 
+              type="text" 
+              id="nama_event"
+              v-model="form.nama_event"
+              class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800"
+              placeholder="Mis: Diskon Kemerdekaan"
+            >
+            <InputError :message="form.errors.nama_event" class="mt-1" />
+          </div>
 
-      <!-- Row 2: Waktu & Gambar -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <label class="block text-sm font-semibold mb-2 text-gray-700">
-            Waktu <span class="text-red-500">*</span>
-          </label>
-          <input
-            v-model="form.waktu"
-            type="time"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all"
-            :class="{ 'border-red-500 ring-2 ring-red-200': form.errors.waktu }"
-            required
-          />
-          <p v-if="form.errors.waktu" class="text-red-500 text-sm mt-2 flex items-center gap-1">
-            <span>⚠️</span>
-            <span>{{ form.errors.waktu }}</span>
-          </p>
-        </div>
-        
-        <div>
-          <label class="block text-sm font-semibold mb-2 text-gray-700">
-            Gambar Event <span class="text-red-500">*</span>
-          </label>
-          <div class="flex items-center gap-4">
-            <!-- Preview Image -->
-            <div class="w-20 h-20 bg-gray-100 rounded-lg border-2 border-gray-300 flex items-center justify-center text-3xl overflow-hidden shadow-sm">
-              <img 
-                v-if="imagePreview" 
-                :src="imagePreview" 
-                alt="Preview" 
-                class="w-full h-full object-cover" 
-              />
-              <span v-else class="text-gray-400">📷</span>
-            </div>
-            
-            <!-- Upload Button -->
-            <div class="flex-1">
-              <input
-                type="file"
-                ref="fileInput"
-                @change="handleFileChange"
-                accept="image/*"
-                class="hidden"
-              />
-              <button
-                type="button"
-                @click="$refs.fileInput.click()"
-                class="bg-gray-700 hover:bg-gray-800 text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="tanggal_event" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+              <input 
+                type="date" 
+                id="tanggal_event"
+                v-model="form.tanggal_event"
+                class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800"
               >
-                <span>📁</span>
-                <span>Pilih File</span>
-              </button>
-              <div class="text-sm text-gray-600 mt-2">
-                {{ form.gambar ? form.gambar.name : 'Belum ada file dipilih' }}
-              </div>
+              <InputError :message="form.errors.tanggal_event" class="mt-1" />
+            </div>
+            <div>
+              <label for="waktu_event" class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
+              <input 
+                type="time" 
+                id="waktu_event"
+                v-model="form.waktu_event"
+                class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800"
+              >
+              <InputError :message="form.errors.waktu_event" class="mt-1" />
             </div>
           </div>
-          <p v-if="form.errors.gambar" class="text-red-500 text-sm mt-2 flex items-center gap-1">
-            <span>⚠️</span>
-            <span>{{ form.errors.gambar }}</span>
-          </p>
+
+          <div>
+            <label for="deskripsi_event" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+            <textarea 
+              id="deskripsi_event"
+              v-model="form.deskripsi_event"
+              rows="6"
+              class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800"
+              placeholder="Jelaskan detail event di sini..."
+            ></textarea>
+            <InputError :message="form.errors.deskripsi_event" class="mt-1" />
+          </div>
         </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Event</label>
+          <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+            <div class="space-y-1 text-center">
+              <img 
+                v-if="imagePreview"
+                :src="imagePreview" 
+                alt="Preview Gambar Event" 
+                class="mx-auto h-40 w-auto object-cover rounded shadow-md mb-4"
+              >
+              <svg v-else class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              
+              <div class="flex text-sm text-gray-600 justify-center">
+                <label for="gambar_event" class="relative cursor-pointer bg-white rounded-md font-medium text-gray-800 hover:text-gray-600">
+                  <span>Upload file baru</span>
+                  <input 
+                    id="gambar_event" 
+                    name="gambar_event" 
+                    type="file" 
+                    class="sr-only"
+                    @input="handleFileChange"
+                  >
+                </label>
+                <p class="pl-1">atau drag and drop</p>
+              </div>
+              <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+            </div>
+          </div>
+          <InputError :message="form.errors.gambar_event" class="mt-1" />
+          
+          <progress v-if="form.progress" :value="form.progress.percentage" max="100" class="w-full mt-2">
+            {{ form.progress.percentage }}%
+          </progress>
+        </div>
+
       </div>
 
-      <!-- Deskripsi -->
-      <div class="mb-8">
-        <label class="block text-sm font-semibold mb-2 text-gray-700">
-          Deskripsi <span class="text-red-500">*</span>
-        </label>
-        <textarea
-          v-model="form.deskripsi"
-          rows="6"
-          placeholder="Deskripsikan event Anda secara detail..."
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all resize-none"
-          :class="{ 'border-red-500 ring-2 ring-red-200': form.errors.deskripsi }"
-          required
-        />
-        <div class="flex justify-between items-center mt-2">
-          <p v-if="form.errors.deskripsi" class="text-red-500 text-sm flex items-center gap-1">
-            <span>⚠️</span>
-            <span>{{ form.errors.deskripsi }}</span>
-          </p>
-          <span class="text-sm text-gray-500 ml-auto">
-            {{ form.deskripsi.length }} karakter
-          </span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex justify-end gap-4 pt-4 border-t border-gray-200">
-        <Link
-          :href="route('admin.dashboard', { tab: 'menu' })"
-          class="px-6 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors text-gray-700"
-        >
-          Batal
-        </Link>
-        <button
+      <div class="flex justify-end pt-6 mt-8 border-t border-gray-200">
+        <button 
           type="submit"
           :disabled="form.processing"
-          class="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 rounded-lg flex items-center gap-2 font-medium shadow-md transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors"
+          :class="{ 'opacity-50 cursor-not-allowed': form.processing }"
         >
-          <span v-if="!form.processing">💾</span>
-          <span v-else class="animate-spin">⏳</span>
-          <span>{{ form.processing ? 'Menyimpan...' : 'Simpan Event' }}</span>
+          {{ form.processing ? 'Menyimpan...' : 'Update Event' }}
         </button>
       </div>
     </form>
@@ -150,51 +106,65 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import InputError from '@/Components/InputError.vue'; // <-- Import
 
 const props = defineProps({
   event: {
     type: Object,
-    default: () => ({
-      nama: '',
-      tanggal: '',
-      waktu: '',
-      deskripsi: '',
-      gambar: null
-    })
+    required: true
   }
 });
 
+// Ganti 'ref' dengan 'useForm' dari Inertia
+// Gunakan nama kolom dari model: 'nama_event', 'tanggal_event', dll.
 const form = useForm({
-  nama: props.event.nama || '',
-  tanggal: props.event.tanggal || '',
-  waktu: props.event.waktu || '',
-  deskripsi: props.event.deskripsi || '',
-  gambar: null
+  _method: 'PUT', // <-- Method untuk Update
+  nama_event: props.event.nama_event,
+  tanggal_event: props.event.tanggal_event,
+  waktu_event: props.event.waktu_event,
+  deskripsi_event: props.event.deskripsi_event,
+  gambar_event: null, // Input file dikosongkan
 });
 
-const fileInput = ref(null);
-const imagePreview = ref(props.event.gambar_url || null);
+// State untuk preview gambar
+const imagePreview = ref(props.event.gambar_url); // Tampilkan gambar yg ada
 
+// Fungsi untuk handle perubahan file input
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (file) {
-    form.gambar = file;
-    
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      imagePreview.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    form.gambar_event = file; // Set file ke form Inertia
+    imagePreview.value = URL.createObjectURL(file); // Buat preview lokal
   }
 };
 
-const submitForm = () => {
-  if (props.event.id) {
-    form.post(route('admin.event.update', props.event.id));
-  } else {
-    form.post(route('admin.event.store'));
-  }
+// Fungsi untuk submit form
+const submitEvent = () => {
+  // Kirim data ke route 'admin.event.update'
+  // 'id_event' diambil dari prop
+  form.post(route('admin.event.update', props.event.id_event), {
+    preserveScroll: true,
+    onSuccess: () => {
+      // Reset file input jika berhasil
+      form.reset('gambar_event');
+      // Update preview kembali ke gambar dari server (jika URL berubah)
+      // (DashboardController akan mengirim prop 'event' yg baru)
+    },
+    // onError: ... (error akan otomatis tampil via InputError)
+  });
 };
+
+// Watcher untuk meng-update form jika prop 'event' berubah (mis: setelah save)
+// Ini memastikan form tetap sinkron jika ada update dari luar
+watch(() => props.event, (newEvent) => {
+  if (!form.processing) {
+    form.nama_event = newEvent.nama_event;
+    form.tanggal_event = newEvent.tanggal_event;
+    form.waktu_event = newEvent.waktu_event;
+    form.deskripsi_event = newEvent.deskripsi_event;
+    imagePreview.value = newEvent.gambar_url; // Update preview
+  }
+}, { deep: true });
 </script>

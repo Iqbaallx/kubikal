@@ -75,6 +75,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{menu}', [AdminMenuController::class, 'update'])->name('update');
             Route::delete('/{menu}', [AdminMenuController::class, 'destroy'])->name('destroy');
             Route::post('/{menu}/toggle-favorite', [AdminMenuController::class, 'toggleFavorite'])->name('toggle-favorite');
+            Route::post('/{menu}/toggle-favorite', [\App\Http\Controllers\Admin\MenuController::class, 'toggleFavorite'])->name('toggle-favorite');
         });
 
         // ==========================================

@@ -1,0 +1,126 @@
+<template>
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-800 text-white">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Gambar</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Nama Event</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Tanggal</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Waktu</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr 
+            v-for="(item, index) in items" 
+            :key="item.id_event"
+            :class="index % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
+          >
+            <td class="px-6 py-3">
+              <div class="w-10 h-10 bg-amber-100 rounded flex items-center justify-center text-xl overflow-hidden">
+                <img v-if="item.gambar_url" :src="item.gambar_url" :alt="item.nama_event" class="w-full h-full object-cover" />
+                <span v-else>🎉</span>
+              </div>
+            </td>
+            <td class="px-6 py-3 text-sm text-gray-900">{{ item.nama_event }}</td>
+            
+            <td class="px-6 py-3 text-sm text-gray-900">{{ formatDate(item.tanggal) }}</td>
+            <td class="px-6 py-3 text-sm text-gray-900">{{ formatTime(item.waktu) }}</td>
+
+            <td class="px-6 py-3">
+              <div class="flex gap-2">
+                <button
+                  @click="editItem(item)"
+                  class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
+                >
+                  Edit
+                </button>
+                <button
+                  @click="deleteItem(item.id_event)"
+                  class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded text-xs"
+                >
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr v-if="items.length === 0">
+            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+              Belum ada event
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { router } from '@inertiajs/vue3';
+
+defineProps({
+  items: {
+    type: Array,
+    required: true
+  }
+});
+
+const emit = defineEmits(['edit']);
+
+/**
+ * ==================================
+ * PERBAIKAN: Fungsi formatDate dibuat lebih kuat
+ * ==================================
+ */
+const formatDate = (dateString) => {
+  // Tangani nilai null, undefined, string "null", atau tanggal default MySQL "0000-00-00"
+  if (!dateString || dateString === '0000-00-00' || dateString === 'null') {
+    return '-';
+  }
+  
+  const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+  const date = new Date(dateString);
+  
+  // Cek lagi jika hasilnya masih 'Invalid Date'
+  if (isNaN(date.getTime())) {
+    return '-';
+  }
+  
+  return date.toLocaleDateString('id-ID', options);
+};
+
+/**
+ * ==================================
+ * BARU: Fungsi untuk memformat waktu (HH:mm)
+ * ==================================
+ */
+const formatTime = (timeString) => {
+  // Tangani nilai null, undefined, atau string "null"
+  if (!timeString || timeString === 'null') {
+    return '-';
+  }
+  
+  // timeString dari DB mungkin "HH:mm:ss", kita hanya mau "HH:mm"
+  const parts = timeString.split(':');
+  if (parts.length >= 2) {
+    return `${parts[0]}:${parts[1]}`;
+  }
+  
+  // Fallback jika formatnya aneh
+  return timeString;
+};
+
+
+const editItem = (item) => {
+  emit('edit', item);
+};
+
+const deleteItem = (id) => {
+  if (confirm('Yakin ingin menghapus event ini?')) {
+    router.delete(route('admin.event.destroy', id), {
+      preserveScroll: true
+    });
+  }
+};
+</script>
