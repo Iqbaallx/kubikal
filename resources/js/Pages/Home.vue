@@ -1,12 +1,11 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import MenuDetailModal from '@/Components/MenuDetailModal.vue'
 import EventDetailModal from '@/Components/EventDetailModal.vue'
 import AppHeader from '@/Components/AppHeader.vue'
 import AppFooter from '@/Components/AppFooter.vue'
 
-// Props dari Laravel (controller)
 defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
@@ -14,15 +13,11 @@ defineProps({
     favoriteMenus: Array,
 })
 
-// State modal Menu
 const showMenuModal = ref(false)
 const selectedMenu = ref(null)
-
-// State modal Event
 const showEventModal = ref(false)
 const selectedEvent = ref(null)
 
-// Fungsi modal Menu
 const openMenuModal = (menuData) => {
     selectedMenu.value = menuData
     showMenuModal.value = true
@@ -31,8 +26,6 @@ const closeMenuModal = () => {
     showMenuModal.value = false
     selectedMenu.value = null
 }
-
-// Fungsi modal Event
 const openEventModal = (eventData) => {
     selectedEvent.value = eventData
     showEventModal.value = true
@@ -41,6 +34,77 @@ const closeEventModal = () => {
     showEventModal.value = false
     selectedEvent.value = null
 }
+
+const mainSliderImages = ref([
+    '/images/About.png',
+    '/images/art.jpg', 
+    '/images/mie.jpg'
+])
+
+const smallGalleryImages = ref([
+    '/images/nasgor.jpg',
+    '/images/holi.jpg'
+])
+
+// --- PENGATURAN TINGGI GALERI (UBAH NILAI INI) ---
+const mainGalleryHeight = '625px';
+const smallGalleryHeight = '300px';
+
+const currentSlideIndex = ref(0) 
+const isLightboxOpen = ref(false)
+let autoPlayInterval = null
+
+const currentMainImage = computed(() => mainSliderImages.value[currentSlideIndex.value])
+
+const nextSlide = () => {
+    currentSlideIndex.value = (currentSlideIndex.value + 1) % mainSliderImages.value.length
+}
+
+const prevSlide = () => {
+    currentSlideIndex.value = (currentSlideIndex.value - 1 + mainSliderImages.value.length) % mainSliderImages.value.length
+}
+
+const openLightboxWithImage = (imgSrc) => {
+    let index = mainSliderImages.value.indexOf(imgSrc);
+    
+    if (index === -1) {
+        mainSliderImages.value.push(imgSrc);
+        index = mainSliderImages.value.length - 1;
+    }
+
+    currentSlideIndex.value = index;
+    openLightbox();
+}
+
+const startAutoPlay = () => {
+    stopAutoPlay() 
+    autoPlayInterval = setInterval(nextSlide, 5000) 
+}
+
+const stopAutoPlay = () => {
+    if (autoPlayInterval) {
+        clearInterval(autoPlayInterval)
+        autoPlayInterval = null
+    }
+}
+
+const openLightbox = () => {
+    stopAutoPlay() 
+    isLightboxOpen.value = true
+}
+
+const closeLightbox = () => {
+    isLightboxOpen.value = false
+    startAutoPlay() 
+}
+
+onMounted(() => {
+    startAutoPlay()
+})
+
+onUnmounted(() => {
+    stopAutoPlay()
+})
 </script>
 
 <template>
@@ -50,22 +114,74 @@ const closeEventModal = () => {
         <AppHeader :canLogin="canLogin" :canRegister="canRegister" />
 
         <main>
-            <!-- Hero Section -->
             <section class="relative h-screen bg-cover bg-center" style="background-image: url('/images/HeroSelection.png');">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-center text-white">
                     <div>
                         <h1 class="text-4xl md:text-6xl font-bold mb-4">Crafted Coffee & Delicious Bites</h1>
                         <p class="text-lg md:text-xl mb-8">Selamat datang di Kubikal Space</p>
-                        <a href="#our-story"
+                        <a href="#gallery"
                            class="bg-white text-gray-800 py-2 px-6 rounded-md font-semibold hover:bg-gray-200 transition duration-300">
-                           Learn More
+                            Lihat Galeri
                         </a>
                     </div>
                 </div>
             </section>
 
-            <!-- Our Story -->
-            <section id="our-story" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
+            <section id="gallery" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
+                <div class="container mx-auto text-center">
+                    <h2 class="text-3xl font-bold mb-8">Gallery</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+                        <div 
+                            class="relative col-span-1 lg:col-span-2 rounded-xl overflow-hidden shadow-2xl group"
+                            :style="{ height: mainGalleryHeight }" @mouseenter="stopAutoPlay"
+                            @mouseleave="startAutoPlay"
+                        >
+                            <img 
+                                :src="currentMainImage" 
+                                class="w-full h-full object-cover cursor-pointer transition-transform duration-500 ease-in-out"
+                                :alt="'Gallery Image ' + (currentSlideIndex + 1)"
+                                @click="openLightbox"
+                            >
+
+                            <button 
+                                @click.stop="prevSlide" 
+                                class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                </svg>
+                            </button>
+                            <button 
+                                @click.stop="nextSlide" 
+                                class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/60 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="col-span-1 flex flex-col gap-6 pr-2">
+                            <div 
+                                v-for="(imgSrc, index) in smallGalleryImages" 
+                                :key="'small-img-' + index" 
+                                class="rounded-xl overflow-hidden shadow-lg transform transition duration-200 hover:opacity-90 hover:shadow-xl cursor-pointer"
+                                :style="{ height: smallGalleryHeight }" @click="openLightboxWithImage(imgSrc)"
+                            >
+                                <img 
+                                    :src="imgSrc" 
+                                    class="w-full h-full object-cover"
+                                    :alt="'Small Gallery Image ' + (index + 1)"
+                                >
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <section id="our-story" class="py-16 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-gray-900">
                 <div class="container mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
                     <div class="w-full md:w-1/2">
                         <img src="/images/About.png" alt="Our Story"
@@ -86,7 +202,6 @@ const closeEventModal = () => {
                 </div>
             </section>
 
-            <!-- Info -->
             <section class="py-12 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
                 <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
                     <div>
@@ -110,15 +225,14 @@ const closeEventModal = () => {
                         <p class="text-gray-600 dark:text-gray-400">
                             Jl. Surya I No.1, Jebres, Kota Surakarta, Jawa Tengah 57126
                         </p>
-                        <a href="https://www.google.com/maps/place/Jl.+Surya+I+No.1,+Jebres,+Kec.+Jebres,+Kota+Surakarta,+Jawa+Tengah+57126/@-7.5542516,110.855285,3a,75y,200.26h,82.94t/data=!3m7!1e1!3m5!1sPfOHgCHtquv_pJAP3XRBRw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D7.059807565462236%26panoid%3DPfOHgCHtquv_pJAP3XRBRw%26yaw%3D200.2611445012532!7i16384!8i8192!4m6!3m5!1s0x2e7a16e28f4322ed:0x1d0fcf54c90429e7!8m2!3d-7.5541224!4d110.8544949!16s%2Fg%2F11t5_zfjw3?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D"
+                        <a href="https://maps.app.goo.gl/DvWZQJ2hJmx9Z3dR8"
                            class="mt-2 inline-block text-blue-600 dark:text-blue-400 hover:underline">
-                           Lihat Peta
+                            Lihat Peta
                         </a>
                     </div>
                 </div>
             </section>
 
-            <!-- Upcoming Events -->
             <section id="events" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto text-center">
                     <h2 class="text-3xl font-bold mb-8">Upcoming Events</h2>
@@ -140,7 +254,6 @@ const closeEventModal = () => {
                 </div>
             </section>
 
-            <!-- Best Sellers -->
             <section class="py-16 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
                 <div class="container mx-auto">
                     <h2 class="text-3xl font-bold mb-12 text-center">Our Best Sellers</h2>
@@ -176,7 +289,43 @@ const closeEventModal = () => {
         <AppFooter class="mt-auto" />
     </div>
 
-    <!-- Modals -->
+    <Teleport to="body">
+        <div 
+            v-if="isLightboxOpen" 
+            class="fixed inset-0 z-[999] bg-black bg-opacity-95 flex items-center justify-center p-4"
+            @click="closeLightbox"
+        >
+            <button 
+                class="absolute top-4 right-4 text-white text-4xl font-bold hover:text-gray-300 z-50"
+                @click="closeLightbox"
+            >×</button>
+
+            <button 
+                @click.stop="prevSlide"
+                class="absolute left-4 text-white p-4 hover:bg-white/10 rounded-full transition"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+
+            <img 
+                :src="currentMainImage" 
+                class="max-w-full max-h-[90vh] object-contain rounded shadow-2xl"
+                @click.stop
+            >
+
+            <button 
+                @click.stop="nextSlide"
+                class="absolute right-4 text-white p-4 hover:bg-white/10 rounded-full transition"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        </div>
+    </Teleport>
+
     <MenuDetailModal :show="showMenuModal" :item="selectedMenu" @close="closeMenuModal" />
     <EventDetailModal :show="showEventModal" :item="selectedEvent" @close="closeEventModal" />
 </template>
