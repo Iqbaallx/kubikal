@@ -108,7 +108,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import InputError from '@/Components/InputError.vue'; // <-- Import
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
   event: {
@@ -117,54 +117,41 @@ const props = defineProps({
   }
 });
 
-// Ganti 'ref' dengan 'useForm' dari Inertia
-// Gunakan nama kolom dari model: 'nama_event', 'tanggal_event', dll.
 const form = useForm({
-  _method: 'PUT', // <-- Method untuk Update
+  _method: 'PUT',
   nama_event: props.event.nama_event,
   tanggal_event: props.event.tanggal_event,
   waktu_event: props.event.waktu_event,
   deskripsi_event: props.event.deskripsi_event,
-  gambar_event: null, // Input file dikosongkan
+  gambar_event: null,
 });
 
-// State untuk preview gambar
-const imagePreview = ref(props.event.gambar_url); // Tampilkan gambar yg ada
+const imagePreview = ref(props.event.gambar_url);
 
-// Fungsi untuk handle perubahan file input
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (file) {
-    form.gambar_event = file; // Set file ke form Inertia
-    imagePreview.value = URL.createObjectURL(file); // Buat preview lokal
+    form.gambar_event = file;
+    imagePreview.value = URL.createObjectURL(file);
   }
 };
 
-// Fungsi untuk submit form
 const submitEvent = () => {
-  // Kirim data ke route 'admin.event.update'
-  // 'id_event' diambil dari prop
   form.post(route('admin.event.update', props.event.id_event), {
     preserveScroll: true,
     onSuccess: () => {
-      // Reset file input jika berhasil
       form.reset('gambar_event');
-      // Update preview kembali ke gambar dari server (jika URL berubah)
-      // (DashboardController akan mengirim prop 'event' yg baru)
     },
-    // onError: ... (error akan otomatis tampil via InputError)
   });
 };
 
-// Watcher untuk meng-update form jika prop 'event' berubah (mis: setelah save)
-// Ini memastikan form tetap sinkron jika ada update dari luar
 watch(() => props.event, (newEvent) => {
   if (!form.processing) {
     form.nama_event = newEvent.nama_event;
     form.tanggal_event = newEvent.tanggal_event;
     form.waktu_event = newEvent.waktu_event;
     form.deskripsi_event = newEvent.deskripsi_event;
-    imagePreview.value = newEvent.gambar_url; // Update preview
+    imagePreview.value = newEvent.gambar_url;
   }
 }, { deep: true });
 </script>

@@ -78,7 +78,6 @@ defineProps({
   }
 });
 
-// Tambahkan 'show-detail' ke emits
 const emit = defineEmits(['edit', 'show-detail']);
 
 const formatDate = (dateString) => {
@@ -104,9 +103,6 @@ const formatTime = (timeString) => {
   return timeString;
 };
 
-// ==================================
-// FUNGSI BARU UNTUK MENAMPILKAN DETAIL
-// ==================================
 const showDetail = (item) => {
   emit('show-detail', item);
 };

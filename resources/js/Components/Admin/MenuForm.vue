@@ -16,7 +16,6 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-// Gunakan useForm dari Inertia
 const form = useForm({
     _method: props.menu ? 'PUT' : 'POST',
     nama: props.menu?.nama || '',
@@ -24,23 +23,19 @@ const form = useForm({
     kategori: props.menu?.kategori || 'Minuman',
     deskripsi: props.menu?.deskripsi || '',
     is_favorit: props.menu?.is_favorit || false,
-    foto: null, // Input file akan ditangani secara terpisah
+    foto: null,
 });
 
-// URL pratinjau untuk gambar
 const fotoPreview = ref(props.menu?.image_url || null);
 
-// Fungsi untuk menangani update file
 const onFotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
         form.foto = file;
-        // Buat URL sementara untuk pratinjau
         fotoPreview.value = URL.createObjectURL(file);
     }
 };
 
-// Fungsi untuk submit form
 const submit = () => {
     const url = props.menu
         ? route('admin.menu.update', props.menu.id)
@@ -49,19 +44,17 @@ const submit = () => {
     form.post(url, {
         preserveScroll: true,
         onSuccess: () => {
-            emit('close'); // Tutup modal setelah sukses
+            emit('close');
             form.reset();
             fotoPreview.value = null;
         },
         onError: (errors) => {
             console.error(errors);
         },
-        // Paksa Inertia untuk mengirim sebagai multipart/form-data
         forceFormData: true, 
     });
 };
 
-// Reset form jika prop 'menu' berubah (misal: dari edit ke create)
 watch(() => props.menu, (newMenu) => {
     form._method = newMenu ? 'PUT' : 'POST';
     form.nama = newMenu?.nama || '';

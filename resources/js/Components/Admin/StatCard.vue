@@ -1,12 +1,10 @@
 <template>
-  <div class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100" :class="hoverColor">
-    <div class="flex items-start justify-between mb-4">
-      <div class="p-3 rounded-xl shadow-lg" :class="[`bg-gradient-to-br ${gradient}`, shadowColor]">
-        <component :is="iconComponent" class="w-6 h-6 text-white" />
-      </div>
+  <div class="bg-white rounded-xl p-4 border border-gray-200 hover:shadow-md transition-all duration-300">
+    <div class="text-2xl font-bold text-gray-900 mb-1">{{ value }}</div>
+    <div class="flex items-center gap-2 text-sm text-gray-600">
+      <component :is="iconComponent" class="w-4 h-4" />
+      <span>{{ title }}</span>
     </div>
-    <div class="text-3xl font-bold text-gray-900 mb-1">{{ value }}</div>
-    <div class="text-sm text-gray-600 font-medium">{{ title }}</div>
   </div>
 </template>
 

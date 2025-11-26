@@ -140,7 +140,6 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 
-// Ambil currentTab dari props atau URL
 const currentTab = computed(() => {
   const urlParams = new URLSearchParams(window.location.search);
   const tabParam = urlParams.get('tab');
@@ -149,7 +148,6 @@ const currentTab = computed(() => {
     return tabParam;
   }
   
-  // Cek dari route name
   const currentRoute = page.url || '';
   
   if (currentRoute.includes('gallery') || currentRoute.includes('tab=gallery')) {
@@ -164,11 +162,7 @@ const currentTab = computed(() => {
     return 'menu';
   }
   
-  if (currentRoute.includes('dashboard') || currentRoute === '/admin/dashboard') {
-    return 'dashboard';
-  }
-  
-  // Default ke dashboard
+  // Default ke dashboard (bukan lagi menu)
   return 'dashboard';
 });
 

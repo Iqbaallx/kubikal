@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import DashboardHeader from '@/Components/Admin/DashboardHeader.vue';
@@ -63,7 +63,20 @@ const props = defineProps({
 });
 
 const page = usePage();
-const activeTab = ref(props.currentTab || 'dashboard');
+
+// Ambil tab dari query parameter, jika tidak ada default ke 'dashboard'
+const getInitialTab = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabParam = urlParams.get('tab');
+  return tabParam || 'dashboard'; // Default ke dashboard
+};
+
+const activeTab = ref(getInitialTab());
+
+// Watch URL changes untuk update activeTab
+watch(() => page.url, () => {
+  activeTab.value = getInitialTab();
+});
 
 const initials = computed(() => {
   const admin = page.props.auth?.admin;

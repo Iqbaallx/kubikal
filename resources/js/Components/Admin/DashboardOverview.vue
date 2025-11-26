@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-6">
-    <!-- Stats Cards - Simple -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div class="text-3xl font-bold text-gray-900 mb-2">{{ stats.totalMenu }}</div>

@@ -1,39 +1,35 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
-import InputError from '@/Components/InputError.vue'; // Gunakan komponen yang sudah ada
-import InputLabel from '@/Components/InputLabel.vue'; // Gunakan komponen yang sudah ada
-import PrimaryButton from '@/Components/PrimaryButton.vue'; // Gunakan komponen yang sudah ada
-import TextInput from '@/Components/TextInput.vue'; // Gunakan komponen yang sudah ada
-
-// Jika Anda punya komponen Checkbox, uncomment baris ini
-// import Checkbox from '@/Components/Checkbox.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 defineProps({
-    status: String, // Untuk menampilkan pesan status (misal: setelah reset password)
+    status: String,
 });
 
 const form = useForm({
-    email: '', // atau 'email' jika menggunakan email
+    email: '',
     password: '',
     remember: false,
 });
 
 const submit = () => {
-    form.post(route('admin.login'), { // Kirim ke rute login admin
+    form.post(route('admin.login'), {
         onFinish: () => form.reset('password'),
     });
 };
 </script>
 
 <template>
-
     <Head title="Admin Log in" />
 
     <div class="flex min-h-screen items-center justify-center bg-gray-100 p-6 dark:bg-gray-900">
         <div class="w-full max-w-md overflow-hidden rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800">
 
             <div class="mb-8 flex items-center justify-center">
-                <img src="/images/logo.png" alt="Kubikal Logo" class="h-16 w-auto mr-3">
+                <img src="/images/LOGO.png" alt="Kubikal Logo" class="h-16 w-auto mr-3">
                 <h1 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Kubikal Admin</h1>
             </div>
 
@@ -61,7 +57,7 @@ const submit = () => {
                             v-model="form.email" required autofocus autocomplete="email"
                             placeholder="Masukkan username Anda" />
                     </div>
-                    <InputError class="mt-2" :message="form.errors.email" /> 
+                    <InputError class="mt-2" :message="form.errors.email" />
                 </div>
 
                 <div>
@@ -96,9 +92,7 @@ const submit = () => {
 </template>
 
 <style scoped>
-/* Tambahkan sedikit style untuk memastikan fokus input terlihat jelas */
 input:focus {
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
-    /* Contoh shadow untuk focus */
 }
 </style>
