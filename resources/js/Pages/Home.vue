@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import MenuDetailModal from '@/Components/MenuDetailModal.vue'
 import EventDetailModal from '@/Components/EventDetailModal.vue'
 import AppHeader from '@/Components/AppHeader.vue'
@@ -46,7 +46,6 @@ const smallGalleryImages = ref([
     '/images/holi.jpg'
 ])
 
-// --- PENGATURAN TINGGI GALERI (UBAH NILAI INI) ---
 const mainGalleryHeight = '625px';
 const smallGalleryHeight = '300px';
 
@@ -61,7 +60,7 @@ const nextSlide = () => {
 }
 
 const prevSlide = () => {
-    currentSlideIndex.value = (currentSlideIndex.value - 1 + mainSliderImages.value.length) % mainSliderImages.value.length
+    currentSlideIndex.value = (currentSlideIndex - 1 + mainSliderImages.value.length) % mainSliderImages.value.length
 }
 
 const openLightboxWithImage = (imgSrc) => {
@@ -98,12 +97,40 @@ const closeLightbox = () => {
     startAutoPlay() 
 }
 
+// Scroll Animation Setup
+let observer = null
+
+const setupScrollAnimation = () => {
+    observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in')
+                }
+            })
+        },
+        {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        }
+    )
+
+    // Observe all elements with scroll-animate class
+    document.querySelectorAll('.scroll-animate').forEach((el) => {
+        observer.observe(el)
+    })
+}
+
 onMounted(() => {
     startAutoPlay()
+    setupScrollAnimation()
 })
 
 onUnmounted(() => {
     stopAutoPlay()
+    if (observer) {
+        observer.disconnect()
+    }
 })
 </script>
 
@@ -116,7 +143,7 @@ onUnmounted(() => {
         <main>
             <section class="relative h-screen bg-cover bg-center" style="background-image: url('/images/HeroSelection.png');">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-center text-white">
-                    <div>
+                    <div class="scroll-animate fade-up">
                         <h1 class="text-4xl md:text-6xl font-bold mb-4">Crafted Coffee & Delicious Bites</h1>
                         <p class="text-lg md:text-xl mb-8">Selamat datang di Kubikal Space</p>
                         <a href="#gallery"
@@ -129,13 +156,13 @@ onUnmounted(() => {
 
             <section id="gallery" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto text-center">
-                    <h2 class="text-3xl font-bold mb-8">Gallery</h2>
+                    <h2 class="text-3xl font-bold mb-8 scroll-animate fade-up">Gallery</h2>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
                         <div 
-                            class="relative col-span-1 lg:col-span-2 rounded-xl overflow-hidden shadow-2xl group"
-                            :style="{ height: mainGalleryHeight }" @mouseenter="stopAutoPlay"
+                            class="relative col-span-1 lg:col-span-2 rounded-xl overflow-hidden shadow-2xl group scroll-animate slide-left"
+                            :style="{ height: mainGalleryHeight }" 
+                            @mouseenter="stopAutoPlay"
                             @mouseleave="startAutoPlay"
                         >
                             <img 
@@ -163,12 +190,13 @@ onUnmounted(() => {
                             </button>
                         </div>
 
-                        <div class="col-span-1 flex flex-col gap-6 pr-2">
+                        <div class="col-span-1 flex flex-col gap-6 pr-2 scroll-animate slide-right">
                             <div 
                                 v-for="(imgSrc, index) in smallGalleryImages" 
                                 :key="'small-img-' + index" 
                                 class="rounded-xl overflow-hidden shadow-lg transform transition duration-200 hover:opacity-90 hover:shadow-xl cursor-pointer"
-                                :style="{ height: smallGalleryHeight }" @click="openLightboxWithImage(imgSrc)"
+                                :style="{ height: smallGalleryHeight }" 
+                                @click="openLightboxWithImage(imgSrc)"
                             >
                                 <img 
                                     :src="imgSrc" 
@@ -177,17 +205,17 @@ onUnmounted(() => {
                                 >
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
+
             <section id="our-story" class="py-16 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-gray-900">
                 <div class="container mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                    <div class="w-full md:w-1/2">
+                    <div class="w-full md:w-1/2 scroll-animate slide-left">
                         <img src="/images/About.png" alt="Our Story"
                              class="rounded-lg shadow-lg w-full h-64 md:h-80 object-cover bg-gray-300 dark:bg-gray-700">
                     </div>
-                    <div class="w-full md:w-1/2 text-center md:text-left">
+                    <div class="w-full md:w-1/2 text-center md:text-left scroll-animate slide-right">
                         <h2 class="text-3xl font-bold mb-4">Our Story</h2>
                         <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
                             Kami percaya, setiap cangkir kopi punya cerita.
@@ -204,7 +232,7 @@ onUnmounted(() => {
 
             <section class="py-12 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
                 <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
-                    <div>
+                    <div class="scroll-animate zoom-in">
                         <div class="flex items-center justify-center mb-2">
                             <svg class="w-6 h-6 mr-2 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -213,7 +241,7 @@ onUnmounted(() => {
                         </div>
                         <p class="text-gray-600 dark:text-gray-400">Setiap Hari: 08:00 - 22:00</p>
                     </div>
-                    <div>
+                    <div class="scroll-animate zoom-in" style="animation-delay: 0.1s;">
                         <div class="flex items-center justify-center mb-2">
                             <svg class="w-6 h-6 mr-2 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -235,12 +263,15 @@ onUnmounted(() => {
 
             <section id="events" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto text-center">
-                    <h2 class="text-3xl font-bold mb-8">Upcoming Events</h2>
+                    <h2 class="text-3xl font-bold mb-8 scroll-animate fade-up">Upcoming Events</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div
-                            v-for="event in events" :key="event.id_event"
+                            v-for="(event, index) in events" 
+                            :key="event.id_event"
                             @click="openEventModal(event)"
-                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transform transition duration-300 hover:-translate-y-2 cursor-pointer">
+                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md transform transition duration-300 hover:-translate-y-2 cursor-pointer scroll-animate scale-in"
+                            :style="{ animationDelay: `${index * 0.1}s` }"
+                        >
                             <img :src="event.gambar_url || '/images/placeholder-event.jpg'" :alt="event.nama_event"
                                 class="rounded-md mb-4 w-full h-40 object-cover bg-gray-300 dark:bg-gray-600">
                             <h3 class="text-xl font-semibold mb-2">{{ event.nama_event }}</h3>
@@ -256,12 +287,15 @@ onUnmounted(() => {
 
             <section class="py-16 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
                 <div class="container mx-auto">
-                    <h2 class="text-3xl font-bold mb-12 text-center">Our Best Sellers</h2>
+                    <h2 class="text-3xl font-bold mb-12 text-center scroll-animate fade-up">Our Best Sellers</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
                         <div
-                            v-for="menu in favoriteMenus" :key="menu.id_menu"
+                            v-for="(menu, index) in favoriteMenus" 
+                            :key="menu.id_menu"
                             @click="openMenuModal(menu)"
-                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer scroll-animate scale-in"
+                            :style="{ animationDelay: `${index * 0.1}s` }"
+                        >
                             <div class="aspect-square overflow-hidden">
                                 <img :src="menu.gambar_url || '/images/placeholder.jpg'" :alt="menu.nama_menu" class="w-full h-full object-cover bg-gray-300 dark:bg-gray-600">
                             </div>
@@ -276,7 +310,7 @@ onUnmounted(() => {
                         </div>
                     </div>
 
-                    <div class="mt-10 flex justify-end">
+                    <div class="mt-10 flex justify-end scroll-animate fade-up">
                         <Link :href="route('menu.index')"
                             class="bg-gray-800 text-white dark:bg-gray-600 dark:text-gray-200 py-3 px-6 rounded-lg font-semibold hover:bg-gray-700 dark:hover:bg-gray-500 transition duration-300 shadow-md">
                             more menu
@@ -338,5 +372,70 @@ onUnmounted(() => {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+}
+
+/* Scroll Animation Styles */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fade Up */
+.fade-up {
+    transform: translateY(40px);
+}
+
+.fade-up.animate-in {
+    transform: translateY(0);
+}
+
+/* Slide Left */
+.slide-left {
+    transform: translateX(-50px);
+    opacity: 0;
+}
+
+.slide-left.animate-in {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Slide Right */
+.slide-right {
+    transform: translateX(50px);
+    opacity: 0;
+}
+
+.slide-right.animate-in {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Scale In */
+.scale-in {
+    transform: scale(0.8);
+    opacity: 0;
+}
+
+.scale-in.animate-in {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Zoom In */
+.zoom-in {
+    transform: scale(0.9);
+    opacity: 0;
+}
+
+.zoom-in.animate-in {
+    transform: scale(1);
+    opacity: 1;
 }
 </style>

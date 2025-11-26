@@ -1,24 +1,21 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import MenuDetailModal from '@/Components/MenuDetailModal.vue'
 import AppHeader from '@/Components/AppHeader.vue'
 import AppFooter from '@/Components/AppFooter.vue'
 
-// Props dari Laravel Controller
 const props = defineProps({
-  menus: Object, // { makanan: [...], minuman: [...] }
+  menus: Object,
   canLogin: Boolean,
   canRegister: Boolean,
 })
 
-// State tab dan modal
-const activeTab = ref('minuman') // minuman | makanan
-const activeSubTab = ref('kopi') // kopi | non-kopi
+const activeTab = ref('minuman')
+const activeSubTab = ref('kopi')
 const showMenuModal = ref(false)
 const selectedMenu = ref(null)
 
-// Format Rupiah
 const formatCurrency = (value) => {
   if (!value) value = 0
   return new Intl.NumberFormat('id-ID', {
@@ -28,7 +25,6 @@ const formatCurrency = (value) => {
   }).format(value)
 }
 
-// Filter menu
 const displayedMenus = computed(() => {
   if (activeTab.value === 'makanan') {
     return props.menus.makanan || []
@@ -42,24 +38,73 @@ const displayedMenus = computed(() => {
   }
 })
 
-// Fungsi modal
 const openMenuModal = (menuData) => {
   selectedMenu.value = menuData
   showMenuModal.value = true
 }
+
 const closeMenuModal = () => {
   showMenuModal.value = false
   selectedMenu.value = null
 }
 
-// Fungsi tab
 const setActiveTab = (tab) => {
   activeTab.value = tab
   if (tab === 'minuman') activeSubTab.value = 'kopi'
+  
+  // Re-observe elements after tab change
+  setTimeout(() => {
+    setupScrollAnimation()
+  }, 100)
 }
+
 const setActiveSubTab = (sub) => {
   activeSubTab.value = sub
+  
+  // Re-observe elements after subtab change
+  setTimeout(() => {
+    setupScrollAnimation()
+  }, 100)
 }
+
+// Scroll Animation Setup
+let observer = null
+
+const setupScrollAnimation = () => {
+  // Disconnect existing observer
+  if (observer) {
+    observer.disconnect()
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in')
+        }
+      })
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  )
+
+  // Observe all elements with scroll-animate class
+  document.querySelectorAll('.scroll-animate').forEach((el) => {
+    observer.observe(el)
+  })
+}
+
+onMounted(() => {
+  setupScrollAnimation()
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <template>
@@ -70,10 +115,10 @@ const setActiveSubTab = (sub) => {
 
     <main class="pt-10">
       <div class="container mx-auto px-4 sm:px-8 lg:px-8 py-10">
-        <h1 class="text-4xl font-bold text-center mb-10">Menu Kami</h1>
+        <h1 class="text-4xl font-bold text-center mb-10 scroll-animate fade-up">Menu Kami</h1>
 
         <!-- Tab Utama -->
-        <div class="flex justify-center mb-8 border-b border-gray-300 dark:border-gray-700">
+        <div class="flex justify-center mb-8 border-b border-gray-300 dark:border-gray-700 scroll-animate fade-up" style="animation-delay: 0.1s;">
           <button
             @click="setActiveTab('minuman')"
             :class="[
@@ -101,7 +146,8 @@ const setActiveSubTab = (sub) => {
         <!-- Sub Tab Minuman -->
         <div
           v-if="activeTab === 'minuman'"
-          class="flex justify-center mb-8 space-x-4"
+          class="flex justify-center mb-8 space-x-4 scroll-animate fade-up"
+          style="animation-delay: 0.2s;"
         >
           <button
             @click="setActiveSubTab('kopi')"
@@ -130,10 +176,11 @@ const setActiveSubTab = (sub) => {
         <!-- Grid Menu -->
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8">
           <div
-            v-for="menu in displayedMenus"
+            v-for="(menu, index) in displayedMenus"
             :key="menu.id_menu"
             @click="openMenuModal(menu)"
-            class="menu-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer"
+            class="menu-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer scroll-animate scale-in"
+            :style="{ animationDelay: `${index * 0.05}s` }"
           >
             <div class="aspect-square overflow-hidden">
               <img
@@ -154,7 +201,7 @@ const setActiveSubTab = (sub) => {
           <!-- Jika tidak ada menu -->
           <div
             v-if="displayedMenus.length === 0"
-            class="col-span-full text-center text-gray-500 py-10 text-sm"
+            class="col-span-full text-center text-gray-500 py-10 text-sm scroll-animate fade-up"
           >
             Menu belum tersedia.
           </div>
@@ -175,5 +222,37 @@ const setActiveSubTab = (sub) => {
 }
 .menu-card:hover img {
   transform: scale(1.05);
+}
+
+/* Scroll Animation Styles */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Up */
+.fade-up {
+  transform: translateY(40px);
+}
+
+.fade-up.animate-in {
+  transform: translateY(0);
+}
+
+/* Scale In */
+.scale-in {
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.scale-in.animate-in {
+  transform: scale(1);
+  opacity: 1;
 }
 </style>
