@@ -1,106 +1,3 @@
-<script setup>
-import { Head, Link } from '@inertiajs/vue3'
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import MenuDetailModal from '@/Components/MenuDetailModal.vue'
-import EventDetailModal from '@/Components/EventDetailModal.vue'
-import AppHeader from '@/Components/AppHeader.vue'
-import AppFooter from '@/Components/AppFooter.vue'
-
-const props = defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    events: Array,
-    favoriteMenus: Array,
-    galleries: Object // Props dari controller
-})
-
-// === LOGIKA GALERI ===
-// Ambil 4 gambar utama untuk ditampilkan
-const displayImages = computed(() => {
-    const images = [];
-    
-    // Ambil dari main slider
-    if (props.galleries?.main?.length > 0) {
-        images.push(...props.galleries.main.slice(0, 4).map(g => g.gambar_url));
-    }
-    
-    // Jika kurang dari 4, tambahkan dari small images
-    if (images.length < 4 && props.galleries?.small_1) {
-        images.push(props.galleries.small_1.gambar_url);
-    }
-    if (images.length < 4 && props.galleries?.small_2) {
-        images.push(props.galleries.small_2.gambar_url);
-    }
-    
-    // Jika masih kurang, tambahkan dari extras
-    if (images.length < 4 && props.galleries?.extras?.length > 0) {
-        const needed = 4 - images.length;
-        images.push(...props.galleries.extras.slice(0, needed).map(g => g.gambar_url));
-    }
-    
-    // Jika masih kurang dari 4, isi dengan placeholder
-    while (images.length < 4) {
-        images.push('/images/placeholder.jpg');
-    }
-    
-    return images.slice(0, 4);
-});
-
-// Gabungkan semua gambar untuk Full Gallery View
-const allImages = computed(() => {
-    const images = [];
-    
-    if (props.galleries?.main?.length > 0) {
-        images.push(...props.galleries.main.map(g => g.gambar_url));
-    }
-    if (props.galleries?.small_1) {
-        images.push(props.galleries.small_1.gambar_url);
-    }
-    if (props.galleries?.small_2) {
-        images.push(props.galleries.small_2.gambar_url);
-    }
-    if (props.galleries?.extras?.length > 0) {
-        images.push(...props.galleries.extras.map(g => g.gambar_url));
-    }
-    
-    return [...new Set(images)];
-});
-
-// --- State UI ---
-const isLightboxOpen = ref(false);
-const lightboxImageIndex = ref(0);
-
-// Lightbox Logic
-const openLightbox = (index) => {
-    lightboxImageIndex.value = allImages.value.indexOf(displayImages.value[index]);
-    if(lightboxImageIndex.value === -1) lightboxImageIndex.value = 0;
-    isLightboxOpen.value = true;
-}
-
-const closeLightbox = () => {
-    isLightboxOpen.value = false;
-}
-
-const nextLightbox = () => {
-    lightboxImageIndex.value = (lightboxImageIndex.value + 1) % allImages.value.length;
-}
-
-const prevLightbox = () => {
-    lightboxImageIndex.value = (lightboxImageIndex.value - 1 + allImages.value.length) % allImages.value.length;
-}
-
-// Modal Logic
-const showMenuModal = ref(false);
-const selectedMenu = ref(null);
-const showEventModal = ref(false);
-const selectedEvent = ref(null);
-
-const openMenuModal = (menu) => { selectedMenu.value = menu; showMenuModal.value = true; }
-const closeMenuModal = () => { showMenuModal.value = false; selectedMenu.value = null; }
-const openEventModal = (event) => { selectedEvent.value = event; showEventModal.value = true; }
-const closeEventModal = () => { showEventModal.value = false; selectedEvent.value = null; }
-</script>
-
 <template>
     <Head title="Home" />
 
@@ -108,6 +5,7 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
         <AppHeader :canLogin="canLogin" :canRegister="canRegister" />
 
         <main>
+            <!-- HERO -->
             <section class="relative h-screen bg-cover bg-center" style="background-image: url('/images/HeroSelection.png');">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-center text-white">
                     <div>
@@ -120,6 +18,7 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
                 </div>
             </section>
 
+            <!-- GALLERY SECTION -->
             <section id="gallery" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto max-w-6xl">
                     <div class="text-center mb-12">
@@ -128,7 +27,7 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
                             Take a peek into our world of handcrafted coffee and delicious bites that await you.
                         </p>
                     </div>
-                    
+
                     <!-- Grid 4 Gambar -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <div 
@@ -161,6 +60,7 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
                 </div>
             </section>
 
+            <!-- OUR STORY -->
             <section id="our-story" class="py-16 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-gray-900">
                 <div class="container mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
                     <div class="w-full md:w-1/2">
@@ -175,11 +75,13 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
                 </div>
             </section>
 
+            <!-- EVENTS -->
             <section id="events" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto text-center">
                     <h2 class="text-3xl font-bold mb-8">Upcoming Events</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div v-for="event in events" :key="event.id_event" @click="openEventModal(event)" class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:-translate-y-2 cursor-pointer transition">
+                        <div v-for="event in events" :key="event.id_event" @click="openEventModal(event)"
+                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:-translate-y-2 cursor-pointer transition">
                             <img :src="event.gambar_url || '/images/placeholder-event.jpg'" class="rounded-md mb-4 w-full h-40 object-cover">
                             <h3 class="text-xl font-semibold mb-2">{{ event.nama_event }}</h3>
                             <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{{ event.deskripsi_event }}</p>
@@ -188,11 +90,13 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
                 </div>
             </section>
 
+            <!-- BEST SELLER -->
             <section class="py-16 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
                 <div class="container mx-auto">
                     <h2 class="text-3xl font-bold mb-12 text-center">Our Best Sellers</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                        <div v-for="menu in favoriteMenus" :key="menu.id_menu" @click="openMenuModal(menu)" class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:-translate-y-1 transition">
+                        <div v-for="menu in favoriteMenus" :key="menu.id_menu" @click="openMenuModal(menu)"
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:-translate-y-1 transition">
                             <div class="aspect-square overflow-hidden">
                                 <img :src="menu.gambar_url || '/images/placeholder.jpg'" class="w-full h-full object-cover">
                             </div>
@@ -212,6 +116,7 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
         <AppFooter class="mt-auto" />
     </div>
 
+    <!-- LIGHTBOX -->
     <Teleport to="body">
         <div v-if="isLightboxOpen" class="fixed inset-0 z-[60] bg-black bg-opacity-95 flex items-center justify-center p-4" @click="closeLightbox">
             <button class="absolute top-4 right-4 text-white text-4xl font-bold hover:text-gray-300 z-50" @click="closeLightbox">×</button>
@@ -229,12 +134,68 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
         </div>
     </Teleport>
 
+    <!-- MODALS -->
     <MenuDetailModal :show="showMenuModal" :item="selectedMenu" @close="closeMenuModal" />
     <EventDetailModal :show="showEventModal" :item="selectedEvent" @close="closeEventModal" />
 </template>
 
+<script setup>
+import { Head, Link } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import AppHeader from '@/Components/AppHeader.vue'
+import AppFooter from '@/Components/AppFooter.vue'
+import MenuDetailModal from '@/Components/MenuDetailModal.vue'
+import EventDetailModal from '@/Components/EventDetailModal.vue'
+
+const props = defineProps({
+    canLogin: Boolean,
+    canRegister: Boolean,
+    events: Array,
+    favoriteMenus: Array,
+    galleries: Object
+})
+
+// === LOGIKA GALERI ===
+const displayImages = computed(() => {
+    if (props.galleries?.favorites?.length > 0) {
+        return props.galleries.favorites.map(g => g.gambar_url).slice(0, 4);
+    }
+    return [];
+});
+
+const allImages = computed(() => {
+    if (props.galleries?.favorites?.length > 0) {
+        return props.galleries.favorites.map(g => g.gambar_url);
+    }
+    return [];
+});
+
+const isLightboxOpen = ref(false);
+const lightboxImageIndex = ref(0);
+
+const openLightbox = (index) => {
+    lightboxImageIndex.value = allImages.value.indexOf(displayImages.value[index]);
+    if (lightboxImageIndex.value === -1) lightboxImageIndex.value = 0;
+    isLightboxOpen.value = true;
+};
+
+const closeLightbox = () => { isLightboxOpen.value = false; };
+const nextLightbox = () => { lightboxImageIndex.value = (lightboxImageIndex.value + 1) % allImages.value.length; };
+const prevLightbox = () => { lightboxImageIndex.value = (lightboxImageIndex.value - 1 + allImages.value.length) % allImages.value.length; };
+
+// Menu & Event Modal
+const showMenuModal = ref(false);
+const selectedMenu = ref(null);
+const showEventModal = ref(false);
+const selectedEvent = ref(null);
+
+const openMenuModal = (menu) => { selectedMenu.value = menu; showMenuModal.value = true; };
+const closeMenuModal = () => { showMenuModal.value = false; selectedMenu.value = null; };
+const openEventModal = (event) => { selectedEvent.value = event; showEventModal.value = true; };
+const closeEventModal = () => { showEventModal.value = false; selectedEvent.value = null; };
+</script>
+
 <style scoped>
-/* Pastikan scrollbar di modal galeri terlihat bagus */
 .overflow-y-auto::-webkit-scrollbar { width: 8px; }
 .overflow-y-auto::-webkit-scrollbar-track { background: #1a1a1a; }
 .overflow-y-auto::-webkit-scrollbar-thumb { background: #4a4a4a; border-radius: 4px; }

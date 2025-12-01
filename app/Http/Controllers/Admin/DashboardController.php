@@ -41,10 +41,15 @@ class DashboardController extends Controller
         ];
         // ==================================
 
+        // ==================================
+        
+        $galleries = \App\Models\Galeri::latest()->get();
+
         return Inertia::render('Admin/Dashboard', [
             'menus' => $menus,
             'stats' => $stats, // Kirim stats yang sudah benar
             'events' => $events,
+            'galleries' => $galleries,
             'currentTab' => $currentTab
         ]);
     }

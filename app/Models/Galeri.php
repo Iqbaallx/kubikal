@@ -12,7 +12,15 @@ class Galeri extends Model
     protected $table = 'galeri';
     protected $primaryKey = 'id_galeri';
 
-    protected $fillable = ['gambar', 'tipe'];
+    protected $fillable = [
+        'gambar', 
+        'tipe', 
+        'is_favorite' // Tambahkan ini
+    ];
+
+    protected $casts = [
+        'is_favorite' => 'boolean',
+    ];
 
     protected $appends = ['gambar_url'];
 

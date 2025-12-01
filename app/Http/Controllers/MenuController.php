@@ -23,27 +23,25 @@ class MenuController extends Controller
                        ->take(3)
                        ->get();
 
+        // Ambil gambar yang difavoritkan untuk Home
         $favorites = Galeri::where('is_favorite', true)
                         ->latest()
-                        ->take(4)
+                        ->take(8) // Ambil cukup banyak untuk display, misal 8
                         ->get();
         
-        $allGalleries = Galeri::latest()->get();
-
         return Inertia::render('Home', [
             'events' => $events,
             'favoriteMenus' => $favoriteMenus,
             'galleries' => [
                 'favorites' => $favorites, 
-                'all' => $allGalleries,
             ],
         ]);
     }
 
     public function gallery()
     {
-
-        $images = Galeri::latest()->get();
+        // Ambil gambar yang TIDAK difavoritkan untuk halaman Gallery
+        $images = Galeri::where('is_favorite', false)->latest()->get();
 
         return Inertia::render('Gallery', [
             'images' => $images

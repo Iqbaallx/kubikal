@@ -15,7 +15,7 @@
               :stats="stats"
               :recentMenus="menus.slice(0, 3)"
               :recentEvents="events.slice(0, 3)"
-              :galleryCount="galleries.main.length + galleries.standard.length"
+              :galleryCount="galleries.length"
             />
 
             <!-- Menu Management -->
@@ -60,14 +60,10 @@ const props = defineProps({
   events: { type: Array, default: () => [] },
 
   // --------------- FIX DI SINI ---------------
+  // --------------- FIX DI SINI ---------------
   galleries: { 
-    type: Object,
-    default: () => ({
-      main: [],
-      small_1: null,
-      small_2: null,
-      standard: []
-    })
+    type: Array,
+    default: () => []
   },
   // --------------------------------------------
 

@@ -2,105 +2,76 @@
   <div class="space-y-8">
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-        <div class="text-3xl font-bold text-gray-900 mb-2">{{ totalImages }}</div>
-        <div class="flex items-center gap-2 text-sm text-gray-600">
-          <span>Total Semua Foto</span>
+      <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex items-center gap-4">
+        <div class="text-4xl font-bold text-gray-900">{{ totalImages }}</div>
+        <div class="text-sm text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            Total Foto
         </div>
       </div>
-      <div class="flex items-center justify-end">
-         </div>
+      <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex items-center gap-4">
+        <div class="text-4xl font-bold text-gray-900">{{ totalFavorites }}</div>
+        <div class="text-sm text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            Total Favorit
+        </div>
+      </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-bold text-gray-800">Slider Utama (Besar)</h3>
-        <span class="px-3 py-1 rounded-full text-xs font-medium" 
-              :class="sliderCount >= 10 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'">
-          {{ sliderCount }} / 10 Gambar
-        </span>
-      </div>
-
-      <div class="mb-6">
-        <input type="file" id="mainUpload" class="hidden" @change="(e) => handleUpload(e, 'main')" accept="image/*" :disabled="sliderCount >= 10">
-        <label for="mainUpload" 
-               class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all"
-               :class="{'opacity-50 cursor-not-allowed': sliderCount >= 10}">
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                <p v-if="uploadingType === 'main'" class="text-indigo-600 font-medium">Mengupload...</p>
-                <div v-else>
-                    <p class="mb-1 text-sm text-gray-500 font-semibold">Klik untuk tambah Slider</p>
-                    <p class="text-xs text-gray-400">Max 2MB per file</p>
-                </div>
-            </div>
+    <div class="flex justify-end">
+        <input type="file" id="newPhotoUpload" class="hidden" @change="handleUpload" accept="image/*">
+        <label for="newPhotoUpload" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg cursor-pointer flex items-center gap-2 transition shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            <span v-if="uploading">Mengupload...</span>
+            <span v-else>Tambah Foto Baru</span>
         </label>
-      </div>
-
-      <div v-if="galleries.main && galleries.main.length > 0" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div v-for="img in galleries.main" :key="img.id_galeri" class="relative group aspect-video rounded-lg overflow-hidden bg-gray-100 shadow">
-          <img :src="img.gambar_url" class="w-full h-full object-cover">
-          <button @click="deleteGallery(img.id_galeri)" class="absolute inset-0 bg-black/50 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all font-medium">
-            Hapus
-          </button>
-        </div>
-      </div>
-      <div v-else class="text-center py-8 text-gray-400 text-sm italic border-2 border-dashed border-gray-100 rounded-lg">
-        Belum ada gambar slider.
-      </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-1 space-y-6">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 class="font-bold text-gray-800 mb-4">Gambar Kecil 1 (Atas)</h3>
-          <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden relative mb-4 border border-gray-200">
-            <img v-if="galleries.small_1" :src="galleries.small_1.gambar_url" class="w-full h-full object-cover">
-            <div v-else class="flex items-center justify-center h-full text-gray-400 text-sm">Kosong</div>
-          </div>
-          <input type="file" id="s1Upload" class="hidden" @change="(e) => handleUpload(e, 'small_1')" accept="image/*">
-          <label for="s1Upload" class="block w-full text-center py-2 px-4 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 cursor-pointer transition">
-            {{ galleries.small_1 ? 'Ganti Gambar' : 'Upload Gambar' }}
-          </label>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 class="font-bold text-gray-800 mb-4">Gambar Kecil 2 (Bawah)</h3>
-          <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden relative mb-4 border border-gray-200">
-            <img v-if="galleries.small_2" :src="galleries.small_2.gambar_url" class="w-full h-full object-cover">
-            <div v-else class="flex items-center justify-center h-full text-gray-400 text-sm">Kosong</div>
-          </div>
-          <input type="file" id="s2Upload" class="hidden" @change="(e) => handleUpload(e, 'small_2')" accept="image/*">
-          <label for="s2Upload" class="block w-full text-center py-2 px-4 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 cursor-pointer transition">
-            {{ galleries.small_2 ? 'Ganti Gambar' : 'Upload Gambar' }}
-          </label>
-        </div>
-      </div>
-
-      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-lg font-bold text-gray-800">Galeri Lainnya (Halaman Gallery)</h3>
-        </div>
-
-        <div class="mb-6">
-          <input type="file" id="stdUpload" class="hidden" @change="(e) => handleUpload(e, 'standard')" accept="image/*">
-          <label for="stdUpload" class="flex items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all">
-             <div v-if="uploadingType === 'standard'" class="text-indigo-600 font-medium">Mengupload...</div>
-             <div v-else class="text-gray-500 font-medium">+ Upload Foto Tambahan</div>
-          </label>
-        </div>
-
-        <div v-if="galleries.standard && galleries.standard.length > 0" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div v-for="img in galleries.standard" :key="img.id_galeri" class="relative group aspect-square rounded-lg overflow-hidden bg-gray-100 shadow-sm">
-            <img :src="img.gambar_url" class="w-full h-full object-cover">
-            <button @click="deleteGallery(img.id_galeri)" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all shadow-md">
-              ×
-            </button>
-          </div>
-        </div>
-        <div v-else class="text-center py-10 text-gray-400 text-sm">
-          Belum ada foto tambahan.
-        </div>
-      </div>
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-800 text-white">
+                    <th class="p-4 font-semibold">Foto</th>
+                    <th class="p-4 font-semibold text-center">Favorit</th>
+                    <th class="p-4 font-semibold text-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <tr v-for="img in galleries" :key="img.id_galeri" class="hover:bg-gray-50 transition">
+                    <td class="p-4">
+                        <div class="w-24 h-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                            <img :src="img.gambar_url" class="w-full h-full object-cover">
+                        </div>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button @click="toggleFavorite(img.id_galeri)" class="focus:outline-none transition transform hover:scale-110">
+                            <svg v-if="img.is_favorite" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300 hover:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+                        </button>
+                    </td>
+                    <td class="p-4 text-right">
+                        <button @click="deleteGallery(img.id_galeri)" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium transition">
+                            Hapus
+                        </button>
+                    </td>
+                </tr>
+                <tr v-if="galleries.length === 0">
+                    <td colspan="3" class="p-8 text-center text-gray-500 italic">
+                        Belum ada foto di galeri.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination (Optional, if needed later) -->
+    <div class="flex justify-end gap-2" v-if="galleries.length > 10">
+        <!-- Simple pagination placeholder -->
     </div>
 
   </div>
@@ -110,54 +81,51 @@
 import { ref, computed } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 
-// Props sekarang menerima Object, bukan Array
 const props = defineProps({
-  galleries: { type: Object, required: true }
+  galleries: { type: Array, required: true }
 });
 
-const uploadingType = ref(null);
+const uploading = ref(false);
 
-// Computed Properties untuk Statistik & Validasi
-const sliderCount = computed(() => props.galleries.main ? props.galleries.main.length : 0);
-
-const totalImages = computed(() => {
-  let count = 0;
-  if (props.galleries.main) count += props.galleries.main.length;
-  if (props.galleries.standard) count += props.galleries.standard.length;
-  if (props.galleries.small_1) count++;
-  if (props.galleries.small_2) count++;
-  return count;
-});
+const totalImages = computed(() => props.galleries.length);
+const totalFavorites = computed(() => props.galleries.filter(g => g.is_favorite).length);
 
 // Fungsi Upload
-const handleUpload = (event, type) => {
+const handleUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    uploadingType.value = type;
+    uploading.value = true;
 
     const form = useForm({
         gambar: file,
-        tipe: type
+        is_favorite: false // Default not favorite
     });
 
-    form.post(route('admin.gallery.store'), {
+    form.post(route('admin.galeri.store'), {
         preserveScroll: true,
         onSuccess: () => {
-            uploadingType.value = null;
+            uploading.value = false;
             event.target.value = ''; // Reset input file
         },
         onError: () => {
-            uploadingType.value = null;
+            uploading.value = false;
             event.target.value = '';
         }
+    });
+};
+
+// Fungsi Toggle Favorite
+const toggleFavorite = (id) => {
+    router.post(route('admin.galeri.toggle-favorite', id), {}, {
+        preserveScroll: true
     });
 };
 
 // Fungsi Delete
 const deleteGallery = (id) => {
   if (confirm('Apakah Anda yakin ingin menghapus foto ini?')) {
-    router.delete(route('admin.gallery.destroy', id), {
+    router.delete(route('admin.galeri.destroy', id), {
       preserveScroll: true
     });
   }

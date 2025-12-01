@@ -61,6 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // GALERI MANAGEMENT
         Route::post('/galeri', [GaleriController::class, 'store'])->name('galeri.store');
+        Route::post('/galeri/{id}/toggle-favorite', [GaleriController::class, 'toggleFavorite'])->name('galeri.toggle-favorite');
         Route::delete('/galeri/{id}', [GaleriController::class, 'destroy'])->name('galeri.destroy');
     });
 });
