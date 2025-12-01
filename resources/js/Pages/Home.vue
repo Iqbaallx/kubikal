@@ -69,7 +69,9 @@
                     <div class="w-full md:w-1/2 text-center md:text-left">
                         <h2 class="text-3xl font-bold mb-4">Our Story</h2>
                         <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-                            Kami percaya, setiap cangkir kopi punya cerita. Kopi kami berasal dari biji pilihan Makassar...
+                            Kami percaya, setiap cangkir kopi punya cerita. Kopi kami berasal dari biji pilihan Makassar, dikenal dengan aroma yang khas dan rasa yang berani — hasil bumi yang dirawat dengan cinta oleh petani lokal.
+                            Dari proses sangrai hingga seduhan terakhir, kami ingin menghadirkan pengalaman ngopi yang otentik, hangat, dan penuh karakter.
+Inilah cita rasa Makassar, dalam setiap tegukan.
                         </p>
                     </div>
                 </div>
