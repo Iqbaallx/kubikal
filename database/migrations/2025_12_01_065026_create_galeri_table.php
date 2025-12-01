@@ -10,7 +10,8 @@ return new class extends Migration {
         Schema::create('galeri', function (Blueprint $table) {
             $table->id('id_galeri');
             $table->string('gambar');
-            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
+
+            $table->boolean('is_favorite')->default(false); 
             $table->timestamps();
         });
     }

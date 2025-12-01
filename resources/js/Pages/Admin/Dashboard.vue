@@ -15,7 +15,7 @@
               :stats="stats"
               :recentMenus="menus.slice(0, 3)"
               :recentEvents="events.slice(0, 3)"
-              :galleryCount="galleries.length"
+              :galleryCount="galleries.main.length + galleries.standard.length"
             />
 
             <!-- Menu Management -->
@@ -58,22 +58,34 @@ const props = defineProps({
   menus: { type: Array, default: () => [] },
   stats: { type: Object, default: () => ({ totalMenu: 0, minuman: 0, makanan: 0, favorit: 0 }) },
   events: { type: Array, default: () => [] },
-  galleries: { type: Array, default: () => [] },
+
+  // --------------- FIX DI SINI ---------------
+  galleries: { 
+    type: Object,
+    default: () => ({
+      main: [],
+      small_1: null,
+      small_2: null,
+      standard: []
+    })
+  },
+  // --------------------------------------------
+
   currentTab: { type: String, default: 'dashboard' }
 });
 
 const page = usePage();
 
-// Ambil tab dari query parameter, jika tidak ada default ke 'dashboard'
+// GET INITIAL TAB FROM URL
 const getInitialTab = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const tabParam = urlParams.get('tab');
-  return tabParam || 'dashboard'; // Default ke dashboard
+  return tabParam || 'dashboard';
 };
 
 const activeTab = ref(getInitialTab());
 
-// Watch URL changes untuk update activeTab
+// Update when URL changes
 watch(() => page.url, () => {
   activeTab.value = getInitialTab();
 });

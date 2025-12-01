@@ -12,8 +12,12 @@ class Galeri extends Model
     protected $table = 'galeri';
     protected $primaryKey = 'id_galeri';
 
-    protected $fillable = [
-        'gambar',
-        'status'
-    ];
+    protected $fillable = ['gambar', 'tipe'];
+
+    protected $appends = ['gambar_url'];
+
+    public function getGambarUrlAttribute()
+    {
+        return $this->gambar ? asset('storage/' . $this->gambar) : null;
+    }
 }

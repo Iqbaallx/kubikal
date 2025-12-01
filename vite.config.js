@@ -17,4 +17,10 @@ export default defineConfig({
             },
         }),
     ],
+    // --- TAMBAHKAN BAGIAN INI ---
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.esm-bundler.js',
+        },
+    },
 });
