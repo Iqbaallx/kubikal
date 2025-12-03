@@ -11,7 +11,7 @@
           >
         </div>
         <div class="font-bold text-sm text-gray-900">
-          kubikal<span class="text-indigo-600">Space</span>
+          AdminKubikal
         </div>
       </div>
     </div>

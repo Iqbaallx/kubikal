@@ -48,6 +48,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('menu')->name('menu.')->group(function () {
             Route::post('/', [AdminMenuController::class, 'store'])->name('store');
             Route::put('/{menu}', [AdminMenuController::class, 'update'])->name('update');
+            Route::post('/{menu}', [AdminMenuController::class, 'update']); // Support POST with _method for file uploads
             Route::delete('/{menu}', [AdminMenuController::class, 'destroy'])->name('destroy');
             Route::post('/{menu}/toggle-favorite', [AdminMenuController::class, 'toggleFavorite'])->name('toggle-favorite');
         });
@@ -56,6 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('event')->name('event.')->group(function () {
             Route::post('/', [AdminEventController::class, 'store'])->name('store');
             Route::put('/{event}', [AdminEventController::class, 'update'])->name('update');
+            Route::post('/{event}', [AdminEventController::class, 'update']); // Support POST with _method for file uploads
             Route::delete('/{event}', [AdminEventController::class, 'destroy'])->name('destroy');
         });
 

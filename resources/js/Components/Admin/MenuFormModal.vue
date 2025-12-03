@@ -23,7 +23,7 @@
         >
           <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
             <!-- Header -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6 flex justify-between items-center">
+            <div class="px-8 py-6 flex justify-between items-center" style="background-color: #383838;">
               <div class="flex items-center gap-3">
                 <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
                   <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,7 +154,7 @@
                 <button 
                   type="submit" 
                   :disabled="form.processing" 
-                  class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-xl shadow-lg shadow-indigo-200 hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="px-6 py-3 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90" style="background-color: #383838;"
                 >
                   {{ form.processing ? 'Menyimpan...' : 'Simpan Menu' }}
                 </button>
@@ -217,7 +217,9 @@ const close = () => {
 
 const submit = () => {
   if (props.isEditing) {
-    form.put(route('admin.menu.update', form.id_menu), {
+    // FIX: Use POST with _method workaround because PUT doesn't support file uploads in Inertia
+    form.post(route('admin.menu.update', form.id_menu), {
+      _method: 'PUT',
       preserveScroll: true,
       onSuccess: () => close(),
     });
@@ -241,7 +243,7 @@ const submit = () => {
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #818cf8, #a78bfa);
+  background: #383838;
   border-radius: 10px;
 }
 
@@ -251,7 +253,7 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background: linear-gradient(to right, #818cf8, #a78bfa);
+  background: #383838;
   border-radius: 9999px;
 }
 </style>

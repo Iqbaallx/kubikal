@@ -16,7 +16,7 @@ defineProps({
                     alt="Kubikal Space Logo" 
                     class="h-12 w-auto object-contain"
                 >
-                <span class="font-semibold text-xl">Kubikal Space</span>
+                <span class="font-semibold text-xl">Kubikal</span>
             </Link>
 
             <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-10">
