@@ -9,8 +9,8 @@
             <section class="relative h-screen bg-cover bg-center" style="background-image: url('/images/HeroSelection.png');">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-center text-white">
                     <div>
-                        <h1 class="text-4xl md:text-6xl font-bold mb-4">Crafted Coffee & Delicious Bites</h1>
-                        <p class="text-lg md:text-xl mb-8">Selamat datang di Kubikal Space</p>
+                        <h1 class="text-4xl md:text-6xl font-bold mb-4">Selamat datang di Kubikal</h1>
+                        <p class="text-lg md:text-xl mb-8">Ijinkan kita memandu kalian untuk merasakan kehangatan seperti di rumah </p>
                         <a href="#gallery" class="bg-white text-gray-800 py-2 px-6 rounded-md font-semibold hover:bg-gray-200 transition duration-300">
                             Lihat Galeri
                         </a>
@@ -69,9 +69,7 @@
                     <div class="w-full md:w-1/2 text-center md:text-left">
                         <h2 class="text-3xl font-bold mb-4">Our Story</h2>
                         <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-                            Kami percaya, setiap cangkir kopi punya cerita. Kopi kami berasal dari biji pilihan Makassar, dikenal dengan aroma yang khas dan rasa yang berani — hasil bumi yang dirawat dengan cinta oleh petani lokal.
-                            Dari proses sangrai hingga seduhan terakhir, kami ingin menghadirkan pengalaman ngopi yang otentik, hangat, dan penuh karakter.
-Inilah cita rasa Makassar, dalam setiap tegukan.
+                            Setiap perjalanan selalu ada awalnya, cerita kita berawal di November 2024. berangkat dari kebiasaan orang Sulawesi Selatan untuk memulai hari dengan kopi, kita berusaha untuk menemani hari kalian dengan menyajikan ruang, makanan,dan minuman.
                         </p>
                     </div>
                 </div>
