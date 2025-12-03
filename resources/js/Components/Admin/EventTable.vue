@@ -2,7 +2,7 @@
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-gray-800 text-white">
+        <thead class="text-white" style="background-color: #383838;">
           <tr>
             <th class="px-6 py-3 text-left text-sm font-semibold">Gambar</th>
             <th class="px-6 py-3 text-left text-sm font-semibold">Nama Event</th>
@@ -44,13 +44,13 @@
                 </button>
                 <button
                   @click="editItem(item)"
-                  class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs"
+                  class="text-white px-3 py-1.5 rounded text-xs" style="background-color: #383838;"
                 >
                   Edit
                 </button>
                 <button
                   @click="deleteItem(item.id_event)"
-                  class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded text-xs"
+                  class="text-white px-3 py-1.5 rounded text-xs hover:opacity-90" style="background-color: #383838;"
                 >
                   Hapus
                 </button>

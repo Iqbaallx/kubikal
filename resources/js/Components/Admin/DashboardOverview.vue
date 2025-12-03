@@ -36,7 +36,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full">
-          <thead class="bg-gray-800 text-white">
+          <thead class="text-white" style="background-color: #383838;">
             <tr>
               <th class="px-6 py-4 text-left text-sm font-semibold">Foto</th>
               <th class="px-6 py-4 text-left text-sm font-semibold">Nama Menu</th>
@@ -73,7 +73,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full">
-          <thead class="bg-gray-800 text-white">
+          <thead class="text-white" style="background-color: #383838;">
             <tr>
               <th class="px-6 py-4 text-left text-sm font-semibold">FOTO</th>
               <th class="px-6 py-4 text-left text-sm font-semibold">NAMA EVENT</th>

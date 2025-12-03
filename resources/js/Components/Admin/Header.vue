@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-800 text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
+  <div class="text-white px-6 py-4 rounded-t-lg flex justify-between items-center" style="background-color: #383838;">
     <h1 class="text-2xl font-bold">{{ title }}</h1>
     <div class="flex items-center gap-4">
       <span>Halo</span>

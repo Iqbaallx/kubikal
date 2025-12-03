@@ -3,11 +3,11 @@
     <!-- Logo Section -->
     <div class="p-6 border-b border-gray-100">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
           <img 
             src="/images/LOGO.png" 
             alt="Kubikal Logo" 
-            class="w-6 h-6 object-contain brightness-0 invert"
+            class="w-6 h-6 object-contain"
           >
         </div>
         <div class="font-bold text-sm text-gray-900">
@@ -24,14 +24,15 @@
         :class="[
           'w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm transition-all duration-200 group relative overflow-hidden',
           isActive('dashboard') 
-            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg shadow-indigo-200' 
+            ? 'text-gray-800 font-semibold shadow-sm' 
             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
         ]"
+        :style="isActive('dashboard') ? 'background-color: #D0CCCC;' : ''"
       >
         <div :class="[
           'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200',
           isActive('dashboard') 
-            ? 'bg-white/20' 
+            ? 'bg-white/50' 
             : 'bg-gray-100 group-hover:bg-gray-200'
         ]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +40,7 @@
           </svg>
         </div>
         <span>Dashboard</span>
-        <div v-if="isActive('dashboard')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full"></div>
+        <div v-if="isActive('dashboard')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full" style="background-color: #383838;"></div>
       </button>
 
       <!-- Kelola Menu -->
@@ -48,14 +49,15 @@
         :class="[
           'w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm transition-all duration-200 group relative overflow-hidden',
           isActive('menu') 
-            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg shadow-indigo-200' 
+            ? 'text-gray-800 font-semibold shadow-sm' 
             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
         ]"
+        :style="isActive('menu') ? 'background-color: #D0CCCC;' : ''"
       >
         <div :class="[
           'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200',
           isActive('menu') 
-            ? 'bg-white/20' 
+            ? 'bg-white/50' 
             : 'bg-gray-100 group-hover:bg-gray-200'
         ]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +65,7 @@
           </svg>
         </div>
         <span>Kelola Menu</span>
-        <div v-if="isActive('menu')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full"></div>
+        <div v-if="isActive('menu')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full" style="background-color: #383838;"></div>
       </button>
       
       <!-- Kelola Event -->
@@ -72,14 +74,15 @@
         :class="[
           'w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm transition-all duration-200 group relative overflow-hidden',
           isActive('event') 
-            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg shadow-indigo-200' 
+            ? 'text-gray-800 font-semibold shadow-sm' 
             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
         ]"
+        :style="isActive('event') ? 'background-color: #D0CCCC;' : ''"
       >
         <div :class="[
           'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200',
           isActive('event') 
-            ? 'bg-white/20' 
+            ? 'bg-white/50' 
             : 'bg-gray-100 group-hover:bg-gray-200'
         ]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +90,7 @@
           </svg>
         </div>
         <span>Kelola Event</span>
-        <div v-if="isActive('event')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full"></div>
+        <div v-if="isActive('event')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full" style="background-color: #383838;"></div>
       </button>
 
       <!-- Kelola Gallery -->
@@ -96,14 +99,15 @@
         :class="[
           'w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm transition-all duration-200 group relative overflow-hidden',
           isActive('gallery') 
-            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg shadow-indigo-200' 
+            ? 'text-gray-800 font-semibold shadow-sm' 
             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
         ]"
+        :style="isActive('gallery') ? 'background-color: #D0CCCC;' : ''"
       >
         <div :class="[
           'w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200',
           isActive('gallery') 
-            ? 'bg-white/20' 
+            ? 'bg-white/50' 
             : 'bg-gray-100 group-hover:bg-gray-200'
         ]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,7 +115,7 @@
           </svg>
         </div>
         <span>Kelola Gallery</span>
-        <div v-if="isActive('gallery')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full"></div>
+        <div v-if="isActive('gallery')" class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full" style="background-color: #383838;"></div>
       </button>
     </nav>
 

@@ -20,7 +20,7 @@
 
     <div class="flex justify-end">
         <input type="file" id="newPhotoUpload" class="hidden" @change="handleUpload" accept="image/*">
-        <label for="newPhotoUpload" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg cursor-pointer flex items-center gap-2 transition shadow-md">
+        <label for="newPhotoUpload" class="text-white font-medium py-2 px-4 rounded-lg cursor-pointer flex items-center gap-2 transition shadow-md hover:opacity-90" style="background-color: #383838;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
             <span v-if="uploading">Mengupload...</span>
             <span v-else>Tambah Foto Baru</span>
@@ -31,7 +31,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-gray-800 text-white">
+                <tr class="text-white" style="background-color: #383838;">
                     <th class="p-4 font-semibold">Foto</th>
                     <th class="p-4 font-semibold text-center">Favorit</th>
                     <th class="p-4 font-semibold text-right">Aksi</th>
@@ -55,7 +55,7 @@
                         </button>
                     </td>
                     <td class="p-4 text-right">
-                        <button @click="deleteGallery(img.id_galeri)" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium transition">
+                        <button @click="deleteGallery(img.id_galeri)" class="text-white px-4 py-2 rounded text-sm font-medium transition hover:opacity-90" style="background-color: #383838;">
                             Hapus
                         </button>
                     </td>
