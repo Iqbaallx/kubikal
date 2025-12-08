@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/Components/AppHeader.vue'
 import AppFooter from '@/Components/AppFooter.vue'
 
@@ -21,6 +21,43 @@ const openLightbox = (index) => {
 const closeLightbox = () => { isLightboxOpen.value = false }
 const nextImage = () => { lightboxIndex.value = (lightboxIndex.value + 1) % props.images.length }
 const prevImage = () => { lightboxIndex.value = (lightboxIndex.value - 1 + props.images.length) % props.images.length }
+
+// Scroll Animation Setup
+let observer = null
+
+const setupScrollAnimation = () => {
+  if (observer) {
+    observer.disconnect()
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in')
+        }
+      })
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  )
+
+  document.querySelectorAll('.scroll-animate').forEach((el) => {
+    observer.observe(el)
+  })
+}
+
+onMounted(() => {
+  setupScrollAnimation()
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <template>
@@ -31,15 +68,16 @@ const prevImage = () => { lightboxIndex.value = (lightboxIndex.value - 1 + props
 
         <main class="flex-1 container mx-auto px-4 py-12">
             <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Galeri Kami</h1>
-                <p class="text-gray-600 dark:text-gray-400">Momen-momen terbaik di Kubikal Space</p>
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4 scroll-animate fade-up">Galeri Kami</h1>
+                <p class="text-gray-600 dark:text-gray-400 scroll-animate fade-up" style="animation-delay: 0.1s;">Momen-momen terbaik di Kubikal Space</p>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <div 
                     v-for="(img, index) in images" 
                     :key="img.id_galeri"
-                    class="aspect-square rounded-xl overflow-hidden cursor-pointer group relative shadow-md hover:shadow-xl transition-all duration-300"
+                    class="aspect-square rounded-xl overflow-hidden cursor-pointer group relative shadow-md hover:shadow-xl transition-all duration-300 scroll-animate scale-in"
+                    :style="{ animationDelay: `${index * 0.05}s` }"
                     @click="openLightbox(index)"
                 >
                     <img 
@@ -78,3 +116,37 @@ const prevImage = () => { lightboxIndex.value = (lightboxIndex.value - 1 + props
         </div>
     </Teleport>
 </template>
+
+<style scoped>
+/* Scroll Animation Styles */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Up */
+.fade-up {
+  transform: translateY(40px);
+}
+
+.fade-up.animate-in {
+  transform: translateY(0);
+}
+
+/* Scale In */
+.scale-in {
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.scale-in.animate-in {
+  transform: scale(1);
+  opacity: 1;
+}
+</style>

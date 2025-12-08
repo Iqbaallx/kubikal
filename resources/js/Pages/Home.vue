@@ -22,8 +22,8 @@
             <section id="gallery" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto max-w-6xl">
                     <div class="text-center mb-12">
-                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Gallery</h2>
-                        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 scroll-animate fade-up">Gallery</h2>
+                        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto scroll-animate fade-up" style="animation-delay: 0.1s;">
                             Take a peek into our world of handcrafted coffee and delicious bites that await you.
                         </p>
                     </div>
@@ -33,7 +33,8 @@
                         <div 
                             v-for="(img, index) in displayImages" 
                             :key="index"
-                            class="aspect-square rounded-lg overflow-hidden shadow-lg cursor-pointer group relative"
+                            class="aspect-square rounded-lg overflow-hidden shadow-lg cursor-pointer group relative scroll-animate scale-in"
+                            :style="{ animationDelay: `${index * 0.1}s` }"
                             @click="openLightbox(index)"
                         >
                             <img 
@@ -63,10 +64,10 @@
             <!-- OUR STORY -->
             <section id="our-story" class="py-16 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-gray-900">
                 <div class="container mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                    <div class="w-full md:w-1/2">
+                    <div class="w-full md:w-1/2 scroll-animate fade-up">
                         <img src="/images/About.png" alt="Our Story" class="rounded-lg shadow-lg w-full h-64 md:h-80 object-cover bg-gray-300 dark:bg-gray-700">
                     </div>
-                    <div class="w-full md:w-1/2 text-center md:text-left">
+                    <div class="w-full md:w-1/2 text-center md:text-left scroll-animate fade-up" style="animation-delay: 0.2s;">
                         <h2 class="text-3xl font-bold mb-4">Our Story</h2>
                         <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
                             Setiap perjalanan selalu ada awalnya, cerita kita berawal di November 2024. berangkat dari kebiasaan orang Sulawesi Selatan untuk memulai hari dengan kopi, kita berusaha untuk menemani hari kalian dengan menyajikan ruang, makanan,dan minuman.
@@ -78,10 +79,11 @@
             <!-- EVENTS -->
             <section id="events" class="py-16 px-4 md:px-8 lg:px-16 bg-white dark:bg-gray-800">
                 <div class="container mx-auto text-center">
-                    <h2 class="text-3xl font-bold mb-8">Upcoming Events</h2>
+                    <h2 class="text-3xl font-bold mb-8 scroll-animate fade-up">Upcoming Events</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div v-for="event in events" :key="event.id_event" @click="openEventModal(event)"
-                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:-translate-y-2 cursor-pointer transition">
+                        <div v-for="(event, index) in events" :key="event.id_event" @click="openEventModal(event)"
+                            class="event-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:-translate-y-2 cursor-pointer transition scroll-animate scale-in"
+                            :style="{ animationDelay: `${index * 0.1}s` }">
                             <img :src="event.gambar_url || '/images/placeholder-event.jpg'" class="rounded-md mb-4 w-full h-40 object-cover">
                             <h3 class="text-xl font-semibold mb-2">{{ event.nama_event }}</h3>
                             <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{{ event.deskripsi_event }}</p>
@@ -93,10 +95,11 @@
             <!-- BEST SELLER -->
             <section class="py-16 px-4 md:px-8 lg:px-16 bg-gray-200 dark:bg-gray-700">
                 <div class="container mx-auto">
-                    <h2 class="text-3xl font-bold mb-12 text-center">Our Best Sellers</h2>
+                    <h2 class="text-3xl font-bold mb-12 text-center scroll-animate fade-up">Our Best Sellers</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                        <div v-for="menu in favoriteMenus" :key="menu.id_menu" @click="openMenuModal(menu)"
-                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:-translate-y-1 transition">
+                        <div v-for="(menu, index) in favoriteMenus" :key="menu.id_menu" @click="openMenuModal(menu)"
+                            class="menu-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:-translate-y-1 transition scroll-animate scale-in"
+                            :style="{ animationDelay: `${index * 0.1}s` }">
                             <div class="aspect-square overflow-hidden">
                                 <img :src="menu.gambar_url || '/images/placeholder.jpg'" class="w-full h-full object-cover">
                             </div>
@@ -141,7 +144,7 @@
 
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AppHeader from '@/Components/AppHeader.vue'
 import AppFooter from '@/Components/AppFooter.vue'
 import MenuDetailModal from '@/Components/MenuDetailModal.vue'
@@ -193,6 +196,43 @@ const openMenuModal = (menu) => { selectedMenu.value = menu; showMenuModal.value
 const closeMenuModal = () => { showMenuModal.value = false; selectedMenu.value = null; };
 const openEventModal = (event) => { selectedEvent.value = event; showEventModal.value = true; };
 const closeEventModal = () => { showEventModal.value = false; selectedEvent.value = null; };
+
+// Scroll Animation Setup
+let observer = null
+
+const setupScrollAnimation = () => {
+  if (observer) {
+    observer.disconnect()
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in')
+        }
+      })
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  )
+
+  document.querySelectorAll('.scroll-animate').forEach((el) => {
+    observer.observe(el)
+  })
+}
+
+onMounted(() => {
+  setupScrollAnimation()
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <style scoped>
@@ -200,4 +240,36 @@ const closeEventModal = () => { showEventModal.value = false; selectedEvent.valu
 .overflow-y-auto::-webkit-scrollbar-track { background: #1a1a1a; }
 .overflow-y-auto::-webkit-scrollbar-thumb { background: #4a4a4a; border-radius: 4px; }
 .overflow-y-auto::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* Scroll Animation Styles */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Up */
+.fade-up {
+  transform: translateY(40px);
+}
+
+.fade-up.animate-in {
+  transform: translateY(0);
+}
+
+/* Scale In */
+.scale-in {
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.scale-in.animate-in {
+  transform: scale(1);
+  opacity: 1;
+}
 </style>
