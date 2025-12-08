@@ -36,8 +36,10 @@ class EventController extends Controller
         $validated = $request->validate([
             'nama_event' => 'required|string|max:255',
             'deskripsi_event' => 'required|string',
-            'tanggal' => 'required|date',
-            'waktu' => 'required|date_format:H:i',
+            'tanggal' => 'nullable|date',
+            'waktu' => 'nullable|date_format:H:i',
+            'tanggal_mulai' => 'required|date|after_or_equal:today',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'gambar_event' => 'nullable|image|max:2048',
         ]);
 
@@ -68,8 +70,10 @@ class EventController extends Controller
         $validated = $request->validate([
             'nama_event' => 'required|string|max:255',
             'deskripsi_event' => 'required|string',
-            'tanggal' => 'required|date',
-            'waktu' => 'required|date_format:H:i,H:i:s',
+            'tanggal' => 'nullable|date',
+            'waktu' => 'nullable|date_format:H:i,H:i:s',
+            'tanggal_mulai' => 'required|date|after_or_equal:today',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'gambar_event' => 'nullable|image|max:2048',
         ]);
 

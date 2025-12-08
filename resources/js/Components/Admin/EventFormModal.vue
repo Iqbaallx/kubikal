@@ -70,25 +70,51 @@
 
                 <div class="grid grid-cols-2 gap-6">
                   <div>
-                    <InputLabel for="tanggal" value="Tanggal Event" class="text-gray-700 font-semibold mb-2" />
+                    <InputLabel for="tanggal_mulai" value="Tanggal Mulai" class="text-gray-700 font-semibold mb-2" />
+                    <TextInput 
+                      id="tanggal_mulai" 
+                      v-model="form.tanggal_mulai" 
+                      type="date" 
+                      :min="today"
+                      class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
+                      required 
+                    />
+                    <InputError :message="form.errors.tanggal_mulai" class="mt-2" />
+                  </div>
+
+                  <div>
+                    <InputLabel for="tanggal_selesai" value="Tanggal Selesai" class="text-gray-700 font-semibold mb-2" />
+                    <TextInput 
+                      id="tanggal_selesai" 
+                      v-model="form.tanggal_selesai" 
+                      type="date" 
+                      :min="form.tanggal_mulai || today"
+                      class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
+                      required 
+                    />
+                    <InputError :message="form.errors.tanggal_selesai" class="mt-2" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                  <div>
+                    <InputLabel for="tanggal" value="Tanggal Event (Opsional)" class="text-gray-700 font-semibold mb-2" />
                     <TextInput 
                       id="tanggal" 
                       v-model="form.tanggal" 
                       type="date" 
                       class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
-                      required 
                     />
                     <InputError :message="form.errors.tanggal" class="mt-2" />
                   </div>
 
                   <div>
-                    <InputLabel for="waktu" value="Waktu Event" class="text-gray-700 font-semibold mb-2" />
+                    <InputLabel for="waktu" value="Waktu Event (Opsional)" class="text-gray-700 font-semibold mb-2" />
                     <TextInput 
                       id="waktu" 
                       v-model="form.waktu" 
                       type="time" 
                       class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
-                      required 
                     />
                     <InputError :message="form.errors.waktu" class="mt-2" />
                   </div>
@@ -166,9 +192,14 @@ const form = useForm({
   deskripsi_event: '',
   tanggal: '',
   waktu: '',
+  tanggal_mulai: '',
+  tanggal_selesai: '',
   gambar_event: null,
   gambar_url: null,
 });
+
+// Get today's date in YYYY-MM-DD format for min attribute
+const today = new Date().toISOString().split('T')[0];
 
 watch(() => props.formData, (data) => {
   if (data) {
@@ -177,6 +208,8 @@ watch(() => props.formData, (data) => {
     form.deskripsi_event = data.deskripsi_event;
     form.tanggal = data.tanggal;
     form.waktu = data.waktu;
+    form.tanggal_mulai = data.tanggal_mulai || '';
+    form.tanggal_selesai = data.tanggal_selesai || '';
     form.gambar_url = data.gambar_url;
     form.gambar_event = null;
   } else {

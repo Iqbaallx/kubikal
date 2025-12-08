@@ -12,11 +12,6 @@
             :alt="item?.nama_menu || 'Menu Item'"
             class="rounded-lg shadow-md w-full h-48 object-cover bg-gray-300 dark:bg-gray-700"
           >
-          <!-- Rating Dummy -->
-          <div class="flex justify-start items-center mt-2">
-            <span v-for="n in 2" :key="n" class="text-yellow-400">★</span>
-            <span v-for="n in 3" :key="n" class="text-gray-300">★</span>
-          </div>
         </div>
 
         <!-- Detail Menu -->
