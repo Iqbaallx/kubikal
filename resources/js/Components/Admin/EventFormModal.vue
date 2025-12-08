@@ -96,28 +96,16 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-6">
-                  <div>
-                    <InputLabel for="tanggal" value="Tanggal Event (Opsional)" class="text-gray-700 font-semibold mb-2" />
-                    <TextInput 
-                      id="tanggal" 
-                      v-model="form.tanggal" 
-                      type="date" 
-                      class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
-                    />
-                    <InputError :message="form.errors.tanggal" class="mt-2" />
-                  </div>
-
-                  <div>
-                    <InputLabel for="waktu" value="Waktu Event (Opsional)" class="text-gray-700 font-semibold mb-2" />
-                    <TextInput 
-                      id="waktu" 
-                      v-model="form.waktu" 
-                      type="time" 
-                      class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
-                    />
-                    <InputError :message="form.errors.waktu" class="mt-2" />
-                  </div>
+                <div>
+                  <InputLabel for="waktu" value="Waktu Event" class="text-gray-700 font-semibold mb-2" />
+                  <TextInput 
+                    id="waktu" 
+                    v-model="form.waktu" 
+                    type="time" 
+                    class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
+                    required
+                  />
+                  <InputError :message="form.errors.waktu" class="mt-2" />
                 </div>
 
                 <div>
