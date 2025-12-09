@@ -40,8 +40,8 @@ class MenuController extends Controller
 
     public function gallery()
     {
-        // Ambil gambar yang TIDAK difavoritkan untuk halaman Gallery
-        $images = Galeri::where('is_favorite', false)->latest()->get();
+        // Ambil semua gambar untuk halaman Gallery (termasuk yang difavoritkan)
+        $images = Galeri::latest()->get();
 
         return Inertia::render('Gallery', [
             'images' => $images
