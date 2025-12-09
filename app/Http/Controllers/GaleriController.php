@@ -53,6 +53,18 @@ class GaleriController extends Controller
     public function toggleFavorite($id)
     {
         $galeri = Galeri::findOrFail($id);
+        
+        // Jika sedang mengaktifkan favorite (dari false ke true)
+        if (!$galeri->is_favorite) {
+            $favoritesCount = Galeri::where('is_favorite', true)->count();
+            
+            if ($favoritesCount >= 4) {
+                return Redirect::back()->withErrors([
+                    'limit' => 'Maksimal 4 foto favorite. Nonaktifkan foto favorite lain terlebih dahulu.'
+                ]);
+            }
+        }
+
         $galeri->is_favorite = !$galeri->is_favorite;
         $galeri->save();
 

@@ -19,7 +19,9 @@ class MenuController extends Controller
                             ->take(4)
                             ->get();
 
-        $events = Event::orderBy('tanggal', 'desc')
+        // Hanya tampilkan event yang masih aktif/upcoming (tanggal_selesai >= hari ini)
+        $events = Event::where('tanggal_selesai', '>=', now()->toDateString())
+                       ->orderBy('tanggal_mulai', 'asc')
                        ->take(3)
                        ->get();
 

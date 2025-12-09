@@ -118,6 +118,17 @@ class MenuController extends Controller
      */
     public function toggleFavorite(Menu $menu)
     {
+        // Jika sedang mengaktifkan favorite (dari false ke true)
+        if (!$menu->favorit) {
+            $favoritesCount = Menu::where('favorit', true)->count();
+            
+            if ($favoritesCount >= 4) {
+                return back()->withErrors([
+                    'limit' => 'Maksimal 4 menu favorite. Nonaktifkan menu favorite lain terlebih dahulu.'
+                ]);
+            }
+        }
+
         $menu->favorit = !$menu->favorit; 
         $menu->save();
 

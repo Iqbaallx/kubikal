@@ -32,6 +32,15 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        // Cek jumlah event aktif (tanggal_selesai >= hari ini)
+        $activeEventsCount = Event::where('tanggal_selesai', '>=', now()->toDateString())->count();
+        
+        if ($activeEventsCount >= 3) {
+            return back()->withErrors([
+                'limit' => 'Maksimal 3 event aktif. Tunggu event lain selesai atau hapus event yang tidak diperlukan.'
+            ]);
+        }
+
         // Validasi ini sudah benar dari sebelumnya
         $validated = $request->validate([
             'nama_event' => 'required|string|max:255',
