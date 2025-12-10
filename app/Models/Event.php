@@ -23,6 +23,7 @@ class Event extends Model
         'deskripsi_event',
         'tanggal', // <-- DIUBAH
         'waktu',   // <-- DIUBAH
+        'waktu_selesai',
         'tanggal_mulai',
         'tanggal_selesai',
         'gambar_event',

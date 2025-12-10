@@ -33,7 +33,7 @@
               </a>
             </td>
             <td class="px-6 py-3 text-sm text-gray-900">{{ formatDateRange(item) }}</td>
-            <td class="px-6 py-3 text-sm text-gray-900">{{ formatTime(item.waktu) }}</td>
+            <td class="px-6 py-3 text-sm text-gray-900">{{ formatTimeRange(item) }}</td>
             <td class="px-6 py-3">
               <div class="flex gap-2">
                 <button
@@ -124,6 +124,27 @@ const formatDateRange = (item) => {
     return startDate;
   } else if (item.tanggal) {
     return formatSingleDate(item.tanggal) || '-';
+  }
+  return '-';
+};
+
+const formatTimeRange = (item) => {
+  const formatSingleTime = (timeString) => {
+    if (!timeString || timeString === 'null') return null;
+    const parts = timeString.split(':');
+    if (parts.length >= 2) {
+      return `${parts[0]}.${parts[1]}`;
+    }
+    return timeString;
+  };
+
+  const startTime = formatSingleTime(item.waktu);
+  const endTime = formatSingleTime(item.waktu_selesai);
+
+  if (startTime && endTime) {
+    return `${startTime} - ${endTime}`;
+  } else if (startTime) {
+    return startTime;
   }
   return '-';
 };

@@ -96,16 +96,29 @@
                   </div>
                 </div>
 
-                <div>
-                  <InputLabel for="waktu" value="Waktu Event" class="text-gray-700 font-semibold mb-2" />
-                  <TextInput 
-                    id="waktu" 
-                    v-model="form.waktu" 
-                    type="time" 
-                    class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
-                    required
-                  />
-                  <InputError :message="form.errors.waktu" class="mt-2" />
+                <div class="grid grid-cols-2 gap-6">
+                  <div>
+                    <InputLabel for="waktu" value="Waktu Mulai" class="text-gray-700 font-semibold mb-2" />
+                    <TextInput 
+                      id="waktu" 
+                      v-model="form.waktu" 
+                      type="time" 
+                      class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
+                      required
+                    />
+                    <InputError :message="form.errors.waktu" class="mt-2" />
+                  </div>
+
+                  <div>
+                    <InputLabel for="waktu_selesai" value="Waktu Selesai" class="text-gray-700 font-semibold mb-2" />
+                    <TextInput 
+                      id="waktu_selesai" 
+                      v-model="form.waktu_selesai" 
+                      type="time" 
+                      class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
+                    />
+                    <InputError :message="form.errors.waktu_selesai" class="mt-2" />
+                  </div>
                 </div>
 
                 <div>
@@ -180,6 +193,7 @@ const form = useForm({
   deskripsi_event: '',
   tanggal: '',
   waktu: '',
+  waktu_selesai: '',
   tanggal_mulai: '',
   tanggal_selesai: '',
   gambar_event: null,
@@ -196,6 +210,7 @@ watch(() => props.formData, (data) => {
     form.deskripsi_event = data.deskripsi_event;
     form.tanggal = data.tanggal;
     form.waktu = data.waktu;
+    form.waktu_selesai = data.waktu_selesai || '';
     form.tanggal_mulai = data.tanggal_mulai || '';
     form.tanggal_selesai = data.tanggal_selesai || '';
     form.gambar_url = data.gambar_url;

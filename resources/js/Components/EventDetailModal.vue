@@ -29,7 +29,7 @@ const close = () => { emit('close'); };
         <p v-if="item?.tanggal_mulai && item?.tanggal_selesai">Tanggal: {{ formatDate(item.tanggal_mulai) }} sampai {{ formatDate(item.tanggal_selesai) }}</p>
         <p v-else-if="item?.tanggal_mulai">Tanggal: {{ formatDate(item.tanggal_mulai) }}</p>
         <p v-else-if="item?.tanggal">Tanggal: {{ formatDate(item.tanggal) }}</p>
-        <p v-if="item?.waktu">Waktu: {{ formatTime(item.waktu) }} WIB</p>
+        <p v-if="item?.waktu">Waktu: {{ formatTimeRange(item) }} WIB</p>
       </div>
       <div class="mt-6 flex justify-end">
         <SecondaryButton @click="close">Tutup</SecondaryButton>
@@ -53,6 +53,26 @@ export default {
       const parts = timeString.split(':');
       if (parts.length >= 2) return parts[0] + ':' + parts[1];
       return timeString;
+    },
+    formatTimeRange(item) {
+      const formatSingleTime = (timeString) => {
+        if (!timeString || timeString === 'null') return null;
+        const parts = timeString.split(':');
+        if (parts.length >= 2) {
+          return `${parts[0]}.${parts[1]}`;
+        }
+        return timeString;
+      };
+
+      const startTime = formatSingleTime(item.waktu);
+      const endTime = formatSingleTime(item.waktu_selesai);
+
+      if (startTime && endTime) {
+        return `${startTime} - ${endTime}`;
+      } else if (startTime) {
+        return startTime;
+      }
+      return '--:--';
     },
   },
 };

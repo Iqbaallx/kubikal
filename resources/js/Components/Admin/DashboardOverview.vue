@@ -140,18 +140,33 @@ const formatDate = (dateString) => {
 };
 
 const getStatus = (event) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const now = new Date();
   
+  // Parse start date with time
   const startDate = new Date(event.tanggal_mulai || event.tanggal);
-  startDate.setHours(0, 0, 0, 0);
+  if (event.waktu) {
+    const [hours, minutes] = event.waktu.split(':');
+    startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    startDate.setHours(0, 0, 0, 0);
+  }
   
+  // Parse end date with time
   const endDate = new Date(event.tanggal_selesai || event.tanggal);
-  endDate.setHours(0, 0, 0, 0);
+  if (event.waktu_selesai) {
+    const [hours, minutes] = event.waktu_selesai.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else if (event.waktu) {
+    // Fallback to waktu if no waktu_selesai
+    const [hours, minutes] = event.waktu.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    endDate.setHours(23, 59, 59, 999);
+  }
   
-  if (today < startDate) {
+  if (now < startDate) {
     return 'Segera';
-  } else if (today >= startDate && today <= endDate) {
+  } else if (now >= startDate && now <= endDate) {
     return 'Berlangsung';
   } else {
     return 'Selesai';
@@ -159,18 +174,32 @@ const getStatus = (event) => {
 };
 
 const getStatusClass = (event) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const now = new Date();
   
+  // Parse start date with time
   const startDate = new Date(event.tanggal_mulai || event.tanggal);
-  startDate.setHours(0, 0, 0, 0);
+  if (event.waktu) {
+    const [hours, minutes] = event.waktu.split(':');
+    startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    startDate.setHours(0, 0, 0, 0);
+  }
   
+  // Parse end date with time
   const endDate = new Date(event.tanggal_selesai || event.tanggal);
-  endDate.setHours(0, 0, 0, 0);
+  if (event.waktu_selesai) {
+    const [hours, minutes] = event.waktu_selesai.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else if (event.waktu) {
+    const [hours, minutes] = event.waktu.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    endDate.setHours(23, 59, 59, 999);
+  }
   
-  if (today < startDate) {
+  if (now < startDate) {
     return 'bg-blue-100 text-blue-700';
-  } else if (today >= startDate && today <= endDate) {
+  } else if (now >= startDate && now <= endDate) {
     return 'bg-green-100 text-green-700';
   } else {
     return 'bg-red-100 text-red-700';
