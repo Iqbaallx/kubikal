@@ -32,7 +32,7 @@
                 {{ item.nama_event }}
               </a>
             </td>
-            <td class="px-6 py-3 text-sm text-gray-900">{{ formatDate(item.tanggal) }}</td>
+            <td class="px-6 py-3 text-sm text-gray-900">{{ formatDateRange(item) }}</td>
             <td class="px-6 py-3 text-sm text-gray-900">{{ formatTime(item.waktu) }}</td>
             <td class="px-6 py-3">
               <div class="flex gap-2">
@@ -101,6 +101,31 @@ const formatTime = (timeString) => {
     return `${parts[0]}:${parts[1]}`;
   }
   return timeString;
+};
+
+const formatDateRange = (item) =\u003e {
+  const formatSingleDate = (dateString) =\u003e {
+    if (!dateString || dateString === '0000-00-00' || dateString === 'null') return null;
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return null;
+    return date.toLocaleDateString('id-ID', { 
+      day: 'numeric', 
+      month: 'short', 
+      year: 'numeric' 
+    });
+  };
+
+  const startDate = formatSingleDate(item.tanggal_mulai);
+  const endDate = formatSingleDate(item.tanggal_selesai);
+
+  if (startDate && endDate) {
+    return `${startDate} - ${endDate}`;
+  } else if (startDate) {
+    return startDate;
+  } else if (item.tanggal) {
+    return formatSingleDate(item.tanggal) || '-';
+  }
+  return '-';
 };
 
 const showDetail = (item) => {

@@ -90,14 +90,14 @@
               </td>
               <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ event.nama_event }}</td>
               <td class="px-6 py-4 text-sm text-gray-600">{{ event.deskripsi_event }}</td>
-              <td class="px-6 py-4 text-sm text-gray-900">{{ formatDate(event.tanggal) }}</td>
+              <td class="px-6 py-4 text-sm text-gray-900">{{ formatDate(event.tanggal_mulai || event.tanggal) }}</td>
               <td class="px-6 py-4 text-sm text-gray-900">{{ formatDate(event.tanggal_selesai || event.tanggal) }}</td>
               <td class="px-6 py-4">
                 <span :class="[
                   'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium',
-                  getStatusClass(event.tanggal)
+                  getStatusClass(event)
                 ]">
-                  {{ getStatus(event.tanggal) }}
+                  {{ getStatus(event) }}
                 </span>
               </td>
             </tr>
@@ -139,26 +139,38 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
 };
 
-const getStatus = (tanggal) => {
-  const eventDate = new Date(tanggal);
+const getStatus = (event) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  eventDate.setHours(0, 0, 0, 0);
   
-  if (eventDate > today) {
+  const startDate = new Date(event.tanggal_mulai || event.tanggal);
+  startDate.setHours(0, 0, 0, 0);
+  
+  const endDate = new Date(event.tanggal_selesai || event.tanggal);
+  endDate.setHours(0, 0, 0, 0);
+  
+  if (today < startDate) {
+    return 'Segera';
+  } else if (today >= startDate && today <= endDate) {
     return 'Berlangsung';
   } else {
     return 'Selesai';
   }
 };
 
-const getStatusClass = (tanggal) => {
-  const eventDate = new Date(tanggal);
+const getStatusClass = (event) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  eventDate.setHours(0, 0, 0, 0);
   
-  if (eventDate > today) {
+  const startDate = new Date(event.tanggal_mulai || event.tanggal);
+  startDate.setHours(0, 0, 0, 0);
+  
+  const endDate = new Date(event.tanggal_selesai || event.tanggal);
+  endDate.setHours(0, 0, 0, 0);
+  
+  if (today < startDate) {
+    return 'bg-blue-100 text-blue-700';
+  } else if (today >= startDate && today <= endDate) {
     return 'bg-green-100 text-green-700';
   } else {
     return 'bg-red-100 text-red-700';
