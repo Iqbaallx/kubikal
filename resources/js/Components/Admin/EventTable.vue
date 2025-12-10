@@ -103,8 +103,8 @@ const formatTime = (timeString) => {
   return timeString;
 };
 
-const formatDateRange = (item) =\u003e {
-  const formatSingleDate = (dateString) =\u003e {
+const formatDateRange = (item) => {
+  const formatSingleDate = (dateString) => {
     if (!dateString || dateString === '0000-00-00' || dateString === 'null') return null;
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return null;
