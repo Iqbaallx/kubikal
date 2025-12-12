@@ -23,7 +23,7 @@ const smoothScrollTo = (targetId) => {
         <nav class="container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
             <Link href="/" class="flex items-center space-x-3">
                 <img 
-                    src="/images/logo.png" 
+                    src="/images/LOGO.png" 
                     alt="Kubikal Space Logo" 
                     class="h-12 w-auto object-contain"
                 >
