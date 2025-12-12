@@ -1,12 +1,12 @@
 <template>
   <AdminLayout>
     <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div class="ml-44">
+      <div class="ml-0 md:ml-44">
         <!-- Header -->
         <DashboardHeader :activeTab="activeTab" :initials="initials" />
 
         <!-- Main Content -->
-        <div class="p-8">
+        <div class="p-4 md:p-8">
           <div class="max-w-[1600px] mx-auto space-y-6">
             
             <!-- Dashboard Overview -->

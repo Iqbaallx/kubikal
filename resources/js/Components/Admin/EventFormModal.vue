@@ -116,8 +116,9 @@
                       v-model="form.waktu_selesai" 
                       type="time" 
                       class="mt-1 block w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" 
+                      :class="{ 'border-red-500': timeValidationError }"
                     />
-                    <InputError :message="form.errors.waktu_selesai" class="mt-2" />
+                    <InputError :message="form.errors.waktu_selesai || timeValidationError" class="mt-2" />
                   </div>
                 </div>
 
@@ -158,7 +159,7 @@
                 </button>
                 <button 
                   type="submit" 
-                  :disabled="form.processing" 
+                  :disabled="form.processing || !!timeValidationError" 
                   class="px-6 py-3 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90" style="background-color: #383838;"
                 >
                   {{ form.processing ? 'Menyimpan...' : 'Simpan Event' }}
@@ -173,7 +174,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue';
+import { watch, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -202,6 +203,21 @@ const form = useForm({
 
 // Get today's date in YYYY-MM-DD format for min attribute
 const today = new Date().toISOString().split('T')[0];
+
+// Time validation
+const timeValidationError = computed(() => {
+  if (form.waktu && form.waktu_selesai) {
+    const [startHour, startMin] = form.waktu.split(':').map(Number);
+    const [endHour, endMin] = form.waktu_selesai.split(':').map(Number);
+    const startMinutes = startHour * 60 + startMin;
+    const endMinutes = endHour * 60 + endMin;
+    
+    if (endMinutes <= startMinutes) {
+      return 'Waktu selesai harus lebih lambat dari waktu mulai';
+    }
+  }
+  return null;
+});
 
 watch(() => props.formData, (data) => {
   if (data) {

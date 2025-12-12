@@ -1,5 +1,5 @@
 <template>
-    <Head title="Home" />
+    <Head title="Kubikal" />
 
     <div class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col">
         <AppHeader :canLogin="canLogin" :canRegister="canRegister" />
@@ -11,9 +11,9 @@
                     <div>
                         <h1 class="text-4xl md:text-6xl font-bold mb-4">Selamat datang di Kubikal</h1>
                         <p class="text-lg md:text-xl mb-8">Ijinkan kita memandu kalian untuk merasakan kehangatan seperti di rumah </p>
-                        <a href="#gallery" class="bg-white text-gray-800 py-2 px-6 rounded-md font-semibold hover:bg-gray-200 transition duration-300">
+                        <button @click="smoothScrollTo('#gallery')" class="bg-white text-gray-800 py-2 px-6 rounded-md font-semibold hover:bg-gray-200 transition duration-300">
                             Lihat Galeri
-                        </a>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -23,9 +23,6 @@
                 <div class="container mx-auto max-w-6xl">
                     <div class="text-center mb-12">
                         <h2 class="text-3xl md:text-4xl font-bold mb-4 scroll-animate fade-up">Gallery</h2>
-                        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto scroll-animate fade-up" style="animation-delay: 0.1s;">
-                            Take a peek into our world of handcrafted coffee and delicious bites that await you.
-                        </p>
                     </div>
 
                     <!-- Grid 4 Gambar -->
@@ -72,6 +69,46 @@
                         <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
                             Setiap perjalanan selalu ada awalnya, cerita kita berawal di November 2024. berangkat dari kebiasaan orang Sulawesi Selatan untuk memulai hari dengan kopi, kita berusaha untuk menemani hari kalian dengan menyajikan ruang, makanan,dan minuman.
                         </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- JAM BUKA & LOKASI -->
+            <section class="py-16 px-4 md:px-8 lg:px-16" style="background-color: #E5E5E5;">
+                <div class="container mx-auto max-w-6xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- Jam Buka/Tutup -->
+                        <div class="flex flex-col items-center justify-center text-center scroll-animate fade-up">
+                            <div class="mb-4">
+                                <svg class="w-12 h-12 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Jam Buka & Tutup</h3>
+                            <p class="text-sm text-gray-600">Setiap Hari: 11.00 - 00.00</p>
+                        </div>
+
+                        <!-- Lokasi -->
+                        <div class="flex flex-col items-center justify-center text-center scroll-animate fade-up" style="animation-delay: 0.1s;">
+                            <div class="mb-4">
+                                <svg class="w-12 h-12 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">Lokasi</h3>
+                            <p class="text-sm text-gray-600 mb-4 max-w-xs">
+                                Jl. Merdeka No. 123, Kota Bahagia, Indonesia
+                            </p>
+                            <a 
+                                href="https://www.google.com/maps/@-7.5542516,110.855285,3a,75y,203.47h,85.72t/data=!3m7!1e1!3m5!1sPfOHgCHtquv_pJAP3XRBRw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D4.278411436339624%26panoid%3DPfOHgCHtquv_pJAP3XRBRw%26yaw%3D203.470121864913!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                class="inline-block px-6 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition-colors"
+                            >
+                                Lihat di Peta
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -196,6 +233,17 @@ const openMenuModal = (menu) => { selectedMenu.value = menu; showMenuModal.value
 const closeMenuModal = () => { showMenuModal.value = false; selectedMenu.value = null; };
 const openEventModal = (event) => { selectedEvent.value = event; showEventModal.value = true; };
 const closeEventModal = () => { showEventModal.value = false; selectedEvent.value = null; };
+
+// Smooth Scroll Function
+const smoothScrollTo = (targetId) => {
+  const element = document.querySelector(targetId);
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+};
 
 // Scroll Animation Setup
 let observer = null

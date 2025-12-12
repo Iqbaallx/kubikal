@@ -30,7 +30,7 @@
       <!-- Event Table -->
       <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <EventTable 
-          :items="events" 
+          :items="sortedEvents" 
           @edit="openEditModal" 
           @show-detail="handleShowDetail" 
         />
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import EventTable from '@/Components/Admin/EventTable.vue';
 import EventFormModal from '@/Components/Admin/EventFormModal.vue';
 import EventDetailModal from '@/Components/EventDetailModal.vue';
@@ -63,6 +63,43 @@ import EventDetailModal from '@/Components/EventDetailModal.vue';
 const props = defineProps({
   events: { type: Array, required: true }
 });
+
+// Sort events: upcoming/ongoing first, completed last
+const sortedEvents = computed(() => {
+  return [...props.events].sort((a, b) => {
+    const now = new Date();
+    
+    // Helper to get event status
+    const getStatus = (event) => {
+      const startDate = new Date(event.tanggal_mulai || event.tanggal);
+      const endDate = new Date(event.tanggal_selesai || event.tanggal);
+      
+      if (event.waktu) {
+        const [hours, minutes] = event.waktu.split(':');
+        startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+      }
+      
+      if (event.waktu_selesai) {
+        const [hours, minutes] = event.waktu_selesai.split(':');
+        endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+      } else {
+        endDate.setHours(23, 59, 59);
+      }
+      
+      if (now < startDate) return 'upcoming';
+      if (now >= startDate && now <= endDate) return 'ongoing';
+      return 'completed';
+    };
+    
+    const statusA = getStatus(a);
+    const statusB = getStatus(b);
+    
+    // Priority: upcoming > ongoing > completed
+    const priority = { 'upcoming': 0, 'ongoing': 1, 'completed': 2 };
+    return priority[statusA] - priority[statusB];
+  });
+});
+
 
 const showModal = ref(false);
 const isEditing = ref(false);

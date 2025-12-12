@@ -57,6 +57,18 @@ class EventController extends Controller
             $validated['gambar_event'] = $request->file('gambar_event')->store('events', 'public');
         }
 
+        // Validasi waktu: waktu_selesai harus lebih besar dari waktu
+        if (!empty($validated['waktu']) && !empty($validated['waktu_selesai'])) {
+            $waktuMulai = strtotime($validated['waktu']);
+            $waktuSelesai = strtotime($validated['waktu_selesai']);
+            
+            if ($waktuSelesai <= $waktuMulai) {
+                return back()->withErrors([
+                    'waktu_selesai' => 'Waktu selesai harus lebih lambat dari waktu mulai.'
+                ]);
+            }
+        }
+
         Event::create($validated);
 
         return Redirect::route('admin.dashboard', ['tab' => 'event'])
@@ -102,6 +114,18 @@ class EventController extends Controller
             unset($validated['gambar_event']);
         }
         // ==========================================
+
+        // Validasi waktu: waktu_selesai harus lebih besar dari waktu
+        if (!empty($validated['waktu']) && !empty($validated['waktu_selesai'])) {
+            $waktuMulai = strtotime($validated['waktu']);
+            $waktuSelesai = strtotime($validated['waktu_selesai']);
+            
+            if ($waktuSelesai <= $waktuMulai) {
+                return back()->withErrors([
+                    'waktu_selesai' => 'Waktu selesai harus lebih lambat dari waktu mulai.'
+                ]);
+            }
+        }
 
         $event->update($validated); // Aman untuk di-update
 

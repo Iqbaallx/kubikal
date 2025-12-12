@@ -1,10 +1,10 @@
 <template>
   <div class="sticky top-0 z-40 text-white border-b border-gray-200/50 shadow-sm" style="background-color: #383838;">
-    <div class="px-8 py-4">
+    <div class="px-4 pl-16 md:pl-8 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
           <!-- Page Title Only -->
-          <h1 class="text-2xl font-bold text-white">
+          <h1 class="text-xl md:text-2xl font-bold text-white">
             {{ getTitle() }}
           </h1>
         </div>

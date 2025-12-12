@@ -8,6 +8,7 @@
             <th class="px-6 py-3 text-left text-sm font-semibold">Nama Event</th>
             <th class="px-6 py-3 text-left text-sm font-semibold">Tanggal</th>
             <th class="px-6 py-3 text-left text-sm font-semibold">Waktu</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
             <th class="px-6 py-3 text-left text-sm font-semibold">Aksi</th>
           </tr>
         </thead>
@@ -35,6 +36,14 @@
             <td class="px-6 py-3 text-sm text-gray-900">{{ formatDateRange(item) }}</td>
             <td class="px-6 py-3 text-sm text-gray-900">{{ formatTimeRange(item) }}</td>
             <td class="px-6 py-3">
+              <span :class="[
+                'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium',
+                getStatusClass(item)
+              ]">
+                {{ getStatus(item) }}
+              </span>
+            </td>
+            <td class="px-6 py-3">
               <div class="flex gap-2">
                 <button
                   @click="showDetail(item)"
@@ -58,7 +67,7 @@
             </td>
           </tr>
           <tr v-if="items.length === 0">
-            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
               Belum ada event
             </td>
           </tr>
@@ -155,6 +164,72 @@ const showDetail = (item) => {
 
 const editItem = (item) => {
   emit('edit', item);
+};
+
+const getStatus = (item) => {
+  const now = new Date();
+  
+  // Parse start date with time
+  const startDate = new Date(item.tanggal_mulai || item.tanggal);
+  if (item.waktu) {
+    const [hours, minutes] = item.waktu.split(':');
+    startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    startDate.setHours(0, 0, 0, 0);
+  }
+  
+  // Parse end date with time
+  const endDate = new Date(item.tanggal_selesai || item.tanggal);
+  if (item.waktu_selesai) {
+    const [hours, minutes] = item.waktu_selesai.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else if (item.waktu) {
+    const [hours, minutes] = item.waktu.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    endDate.setHours(23, 59, 59, 999);
+  }
+  
+  if (now < startDate) {
+    return 'Segera';
+  } else if (now >= startDate && now <= endDate) {
+    return 'Berlangsung';
+  } else {
+    return 'Selesai';
+  }
+};
+
+const getStatusClass = (item) => {
+  const now = new Date();
+  
+  // Parse start date with time
+  const startDate = new Date(item.tanggal_mulai || item.tanggal);
+  if (item.waktu) {
+    const [hours, minutes] = item.waktu.split(':');
+    startDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    startDate.setHours(0, 0, 0, 0);
+  }
+  
+  // Parse end date with time
+  const endDate = new Date(item.tanggal_selesai || item.tanggal);
+  if (item.waktu_selesai) {
+    const [hours, minutes] = item.waktu_selesai.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else if (item.waktu) {
+    const [hours, minutes] = item.waktu.split(':');
+    endDate.setHours(parseInt(hours), parseInt(minutes), 0);
+  } else {
+    endDate.setHours(23, 59, 59, 999);
+  }
+  
+  if (now < startDate) {
+    return 'bg-blue-100 text-blue-700';
+  } else if (now >= startDate && now <= endDate) {
+    return 'bg-green-100 text-green-700';
+  } else {
+    return 'bg-gray-200 text-gray-700';
+  }
 };
 
 const deleteItem = (id) => {

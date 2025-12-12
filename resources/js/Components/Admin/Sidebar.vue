@@ -1,7 +1,18 @@
 <template>
-  <div class="w-44 bg-white border-r border-gray-200 min-h-screen flex flex-col fixed left-0 top-0 bottom-0 z-20 shadow-lg">
+  <!-- Backdrop (mobile only) -->
+  <div 
+    v-if="isMobileMenuOpen" 
+    @click="closeMobile"
+    class="fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity"
+  ></div>
+
+  <!-- Sidebar -->
+  <div :class="[
+    'w-44 bg-white border-r border-gray-200 min-h-screen flex flex-col fixed left-0 top-0 bottom-0 shadow-lg z-40 transition-transform duration-300 ease-in-out',
+    isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+  ]">
     <!-- Logo Section -->
-    <div class="p-6 border-b border-gray-100">
+    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
           <img 
@@ -14,6 +25,15 @@
           AdminKubikal
         </div>
       </div>
+      <!-- Close button for mobile -->
+      <button 
+        @click="closeMobile"
+        class="md:hidden p-1 hover:bg-gray-100 rounded transition-colors"
+      >
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
     
     <!-- Navigation Menu -->
@@ -142,6 +162,15 @@
 import { computed } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 
+const props = defineProps({
+  isMobileMenuOpen: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const emit = defineEmits(['closeMobile']);
+
 const page = usePage();
 
 const currentTab = computed(() => {
@@ -188,6 +217,12 @@ const navigateTo = (tab) => {
       replace: false
     });
   }
+  // Close mobile menu after navigation
+  emit('closeMobile');
+};
+
+const closeMobile = () => {
+  emit('closeMobile');
 };
 </script>
 

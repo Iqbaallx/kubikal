@@ -5,6 +5,17 @@ defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
 });
+
+// Smooth scroll function
+const smoothScrollTo = (targetId) => {
+  const element = document.querySelector(targetId);
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+};
 </script>
 
 <template>
@@ -21,8 +32,9 @@ defineProps({
 
             <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-10">
                 <Link href="/" class="text-gray-600 hover:text-gray-900 transition">Home</Link>
-                <Link href="/#our-story" class="text-gray-600 hover:text-gray-900 transition">Our Story</Link>
-                <Link href="/#events" class="text-gray-600 hover:text-gray-900 transition">Event</Link>
+                <button @click="smoothScrollTo('#our-story')" class="text-gray-600 hover:text-gray-900 transition">Our Story</button>
+                <button @click="smoothScrollTo('#events')" class="text-gray-600 hover:text-gray-900 transition">Event</button>
+                <Link :href="route('gallery.index')" class="text-gray-600 hover:text-gray-900 transition">Gallery</Link>
                 <Link :href="route('menu.index')" class="text-gray-600 hover:text-gray-900 transition">Menu</Link>
             </div>
         </nav>
