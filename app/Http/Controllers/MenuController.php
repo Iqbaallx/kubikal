@@ -19,8 +19,15 @@ class MenuController extends Controller
                             ->take(4)
                             ->get();
 
-        // Hanya tampilkan event yang masih aktif/upcoming (tanggal_selesai >= hari ini)
-        $events = Event::where('tanggal_selesai', '>=', now()->toDateString())
+        // Hanya tampilkan event yang masih aktif/upcoming 
+        // Filter event yang sudah selesai (tanggal_selesai + waktu_selesai > now)
+        $events = Event::whereRaw("
+            CASE 
+                WHEN waktu_selesai IS NOT NULL AND waktu_selesai != '' 
+                THEN CONCAT(tanggal_selesai, ' ', waktu_selesai) >= ?
+                ELSE tanggal_selesai >= ?
+            END
+        ", [now()->format('Y-m-d H:i:s'), now()->toDateString()])
                        ->orderBy('tanggal_mulai', 'asc')
                        ->take(3)
                        ->get();
